@@ -23,8 +23,8 @@ public class Album {
     private Tag tag;
 
     @ManyToMany(fetch = FetchType.LAZY)
-    @JoinTable(name = "diaries_attachment",
-            joinColumns = @JoinColumn(name = "diaries_id"),
+    @JoinTable(name = "albums_attachment",
+            joinColumns = @JoinColumn(name = "albums_id"),
             inverseJoinColumns = @JoinColumn(name = "attachments_id"))
     private Set<Attachment> attachment = new HashSet<>();
 
