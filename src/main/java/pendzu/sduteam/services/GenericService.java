@@ -1,15 +1,14 @@
 package pendzu.sduteam.services;
 
-import java.util.List;
+import java.util.Optional;
 
 public interface GenericService<T> {
-    List<T> findAllExist();
+    Optional<T> findById(Long id);
 
-    T findExistById(int id);
-
-    T findDeletedById(int id);
+    Iterable<T> findAll();
 
     T save(T model);
 
-    boolean delete(int id);
+    void delete(Long id);
+
 }
