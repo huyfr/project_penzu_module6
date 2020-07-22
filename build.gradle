@@ -34,6 +34,12 @@ dependencies {
     implementation 'com.google.firebase:firebase-admin:6.11.0'
     compile group: 'commons-codec', name: 'commons-codec', version: '1.10'
     testCompile group: 'com.h2database', name: 'h2', version: '1.4.200'
+
+    compile group: 'org.springframework.security', name: 'spring-security-jwt', version: '1.0.10.RELEASE'
+
+    // https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter-oauth2-client
+//    compile group: 'org.springframework.boot', name: 'spring-boot-starter-oauth2-client', version: '2.3.1.RELEASE'
+
 }
 
 test {
