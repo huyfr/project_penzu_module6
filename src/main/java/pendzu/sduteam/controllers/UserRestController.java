@@ -1,6 +1,8 @@
 package pendzu.sduteam.controllers;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import pendzu.sduteam.models.User;
 import pendzu.sduteam.services.impl.UserServiceImpl;
@@ -16,13 +18,16 @@ public class UserRestController {
     private UserServiceImpl userService;
 
     @GetMapping("/userList")
-    public List<User> showListUser(){
-        return (List<User>) userService.findAll();
+    public ResponseEntity<List<User>> showListUser(){
+        return ResponseEntity.ok((List<User>) userService.findAll());
     }
 
     @DeleteMapping("/user/{id}")
-    public void deleteUser(@PathVariable Long id){
+    public ResponseEntity<Void> deleteUser(@PathVariable Long id){
         userService.delete(id);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
+
+
 
 }
