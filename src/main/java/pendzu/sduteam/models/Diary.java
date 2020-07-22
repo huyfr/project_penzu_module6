@@ -7,6 +7,8 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.time.LocalDateTime;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 @Table(name = "diaries")
@@ -37,13 +39,14 @@ public class Diary {
 
     private LocalDateTime updatedate;
 
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(name = "diaries_attachment",
             joinColumns = @JoinColumn(name = "diaries_id"),
             inverseJoinColumns = @JoinColumn(name = "attachments_id"))
-    private String attachment;
+    private Set<Attachment> attachment = new HashSet<>();
 
 
+    private int status = 1;
 
     @ManyToOne(targetEntity = User.class)
     @JoinColumn(name = "users_id")
@@ -59,9 +62,16 @@ public class Diary {
     public Diary() {
     }
 
-    public Diary(String title, String description, String content,
-                 Tag tag, LocalDateTime createdate, LocalDateTime updatedate,
-                 String attachment, User user, String blobstring, Reaction reaction) {
+
+    public int getStatus() {
+        return status;
+    }
+
+    public void setStatus(int status) {
+        this.status = status;
+    }
+
+    public Diary(@NotBlank @Size(min = 3, max = 64) String title, @NotBlank @Size(min = 3, max = 64) String description, @NotBlank String content, @NotBlank Tag tag, LocalDateTime createdate, LocalDateTime updatedate, Set<Attachment> attachment, int status, User user, String blobstring, Reaction reaction) {
         this.title = title;
         this.description = description;
         this.content = content;
@@ -69,13 +79,14 @@ public class Diary {
         this.createdate = createdate;
         this.updatedate = updatedate;
         this.attachment = attachment;
+        this.status = status;
         this.user = user;
         this.blobstring = blobstring;
         this.reaction = reaction;
     }
 
     public Diary(String title, String description, String content,
-                 Tag tag, String attachment, User user) {
+                 Tag tag, Set<Attachment> attachment, User user) {
         this.title = title;
         this.description = description;
         this.content = content;
@@ -141,11 +152,11 @@ public class Diary {
         this.updatedate = updatedate;
     }
 
-    public String getAttachment() {
+    public Set<Attachment> getAttachment() {
         return attachment;
     }
 
-    public void setAttachment(String attachment) {
+    public void setAttachment(Set<Attachment> attachment) {
         this.attachment = attachment;
     }
 
