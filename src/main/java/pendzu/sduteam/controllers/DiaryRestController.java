@@ -18,12 +18,12 @@ public class DiaryRestController {
     @Autowired
     private IDiaryService diaryService;
 
-    @GetMapping()
+    @GetMapping("/diaries")
     public ResponseEntity<Iterable<Diary>> getAllDiary(Diary diary){
         return ResponseEntity.ok(this.diaryService.findAll());
     }
 
-    @GetMapping("/{id}")
+    @GetMapping("/diary/{id}")
     public ResponseEntity<Optional<Diary>> getById(@PathVariable Long id){
         try {
             return ResponseEntity.ok(this.diaryService.findById(id));
@@ -32,12 +32,12 @@ public class DiaryRestController {
         }
     }
 
-    @PostMapping
+    @PostMapping("/create")
     public ResponseEntity<Diary> create(@RequestBody Diary diary){
         return ResponseEntity.ok(this.diaryService.create(diary));
     }
 
-    @PutMapping
+    @PutMapping("/edit")
     public ResponseEntity<Diary> update(@RequestBody Diary diary){
         return ResponseEntity.ok(this.diaryService.save(diary));
     }
