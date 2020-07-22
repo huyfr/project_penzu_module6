@@ -28,7 +28,7 @@ public class UserRestController {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
-    @PutMapping("/user/{id}")
+    @DeleteMapping("/user/block/{id}")
     public ResponseEntity<Void> blockUser(@PathVariable Long id){
         userService.blockUser(id);
         return new ResponseEntity<>(HttpStatus.OK);
