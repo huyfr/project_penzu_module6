@@ -11,7 +11,7 @@ import pendzu.sduteam.services.IDiaryService;
 import java.util.Optional;
 
 @Service
-@PropertySource({"classpath:config/status.properties"})
+@PropertySource({"classpath:status.properties"})
 public class DiaryServiceImpl implements IDiaryService {
 
     @Value("${entity.deleted}")
