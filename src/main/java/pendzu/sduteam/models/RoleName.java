@@ -1,7 +1,7 @@
 package pendzu.sduteam.models;
 
 public enum RoleName {
-    USER,
-    PO,
-    ADMIN
+    ROLE_USER,
+    ROLE_PO,
+    ROLE_ADMIN
 }

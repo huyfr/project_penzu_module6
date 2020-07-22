@@ -56,6 +56,8 @@ public class User {
     @Lob
     private String blobString;
 
+    private int status = 1;
+
     public User() {
     }
 
@@ -67,11 +69,28 @@ public class User {
         this.roles = roles;
     }
 
+    public User(@NotBlank @Size(min = 3, max = 64) String name, @NotBlank @Size(min = 3, max = 64) String username, @NotBlank @Email @Size(max = 64) String email, @NotBlank @Size(min = 6, max = 128) String password, Set<Role> roles, int status) {
+        this.name = name;
+        this.username = username;
+        this.email = email;
+        this.password = password;
+        this.roles = roles;
+        this.status = status;
+    }
+
     public User(@NotBlank @Size(min = 3, max = 64) String name, @NotBlank @Size(min = 3, max = 64) String username, @NotBlank @Email @Size(max = 64) String email, @NotBlank @Size(min = 6, max = 128) String password) {
         this.name = name;
         this.username = username;
         this.email = email;
         this.password = password;
+    }
+
+    public int getStatus() {
+        return status;
+    }
+
+    public void setStatus(int status) {
+        this.status = status;
     }
 
     public Long getId() {

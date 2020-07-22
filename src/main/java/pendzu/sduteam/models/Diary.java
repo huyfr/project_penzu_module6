@@ -1,0 +1,175 @@
+package pendzu.sduteam.models;
+
+import org.apache.tomcat.jni.Local;
+
+import javax.persistence.*;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
+import java.time.LocalDateTime;
+
+@Entity
+@Table(name = "diaries")
+public class Diary {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    Long id;
+
+    @NotBlank
+    @Size(min = 3, max = 64)
+    private String title;
+
+    @NotBlank
+    @Size(min = 3, max = 64)
+    private String description;
+
+    @NotBlank
+    @Lob
+    private String content;
+
+    @NotBlank
+    @ManyToOne(targetEntity = Tag.class)
+    @JoinColumn(name = "tag_id")
+    private Tag tag;
+
+    private LocalDateTime createdate = LocalDateTime.now();
+
+    private LocalDateTime updatedate;
+
+    @ManyToMany
+    @JoinTable(name = "diaries_attachment",
+            joinColumns = @JoinColumn(name = "diaries_id"),
+            inverseJoinColumns = @JoinColumn(name = "attachments_id"))
+    private String attachment;
+
+
+
+    @ManyToOne(targetEntity = User.class)
+    @JoinColumn(name = "users_id")
+    private User user;
+
+
+    private String blobstring;
+
+    @ManyToOne(targetEntity = Reaction.class)
+    @JoinColumn(name = "reactions_id")
+    private Reaction reaction;
+
+    public Diary() {
+    }
+
+    public Diary(String title, String description, String content,
+                 Tag tag, LocalDateTime createdate, LocalDateTime updatedate,
+                 String attachment, User user, String blobstring, Reaction reaction) {
+        this.title = title;
+        this.description = description;
+        this.content = content;
+        this.tag = tag;
+        this.createdate = createdate;
+        this.updatedate = updatedate;
+        this.attachment = attachment;
+        this.user = user;
+        this.blobstring = blobstring;
+        this.reaction = reaction;
+    }
+
+    public Diary(String title, String description, String content,
+                 Tag tag, String attachment, User user) {
+        this.title = title;
+        this.description = description;
+        this.content = content;
+        this.tag = tag;
+        this.attachment = attachment;
+        this.user = user;
+        this.blobstring = blobstring;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public String getContent() {
+        return content;
+    }
+
+    public void setContent(String content) {
+        this.content = content;
+    }
+
+    public Tag getTag() {
+        return tag;
+    }
+
+    public void setTag(Tag tag) {
+        this.tag = tag;
+    }
+
+    public LocalDateTime getCreatedate() {
+        return createdate;
+    }
+
+    public void setCreatedate(LocalDateTime createdate) {
+        this.createdate = createdate;
+    }
+
+    public LocalDateTime getUpdatedate() {
+        return updatedate;
+    }
+
+    public void setUpdatedate(LocalDateTime updatedate) {
+        this.updatedate = updatedate;
+    }
+
+    public String getAttachment() {
+        return attachment;
+    }
+
+    public void setAttachment(String attachment) {
+        this.attachment = attachment;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
+
+    public String getBlobstring() {
+        return blobstring;
+    }
+
+    public void setBlobstring(String blobstring) {
+        this.blobstring = blobstring;
+    }
+
+    public Reaction getReaction() {
+        return reaction;
+    }
+
+    public void setReaction(Reaction reaction) {
+        this.reaction = reaction;
+    }
+}
