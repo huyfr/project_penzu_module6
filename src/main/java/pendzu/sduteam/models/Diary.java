@@ -30,7 +30,7 @@ public class Diary {
     @Lob
     private String content;
 
-    @NotBlank
+//    @NotBlank
     @ManyToOne(targetEntity = Tag.class)
     @JoinColumn(name = "tag_id")
     private Tag tag;
