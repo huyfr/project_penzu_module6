@@ -19,11 +19,11 @@ public class Diary {
     Long id;
 
     @NotBlank
-    @Size(min = 3, max = 64)
+    @Lob
     private String title;
 
     @NotBlank
-    @Size(min = 3, max = 64)
+    @Lob
     private String description;
 
     @NotBlank
