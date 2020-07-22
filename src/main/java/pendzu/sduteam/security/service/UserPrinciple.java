@@ -12,12 +12,16 @@ import java.util.Objects;
 import java.util.stream.Collectors;
 
 public class UserPrinciple implements UserDetails {
-    public static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
     private Long id;
+
     private String name;
+
     private String username;
+
     private String email;
+
     private String avatar;
 
     @JsonIgnore
@@ -26,7 +30,7 @@ public class UserPrinciple implements UserDetails {
     private Collection<? extends GrantedAuthority> roles;
 
     public UserPrinciple(Long id, String name,
-                         String username, String email, String password, String avatar,
+                         String username, String email, String password,String avatar,
                          Collection<? extends GrantedAuthority> roles) {
         this.id = id;
         this.name = name;
@@ -39,7 +43,9 @@ public class UserPrinciple implements UserDetails {
 
     public static UserPrinciple build(User user) {
         List<GrantedAuthority> authorities = user.getRoles().stream().map(role ->
-                new SimpleGrantedAuthority(role.getName().name())).collect(Collectors.toList());
+                new SimpleGrantedAuthority(role.getName().name())
+        ).collect(Collectors.toList());
+
         return new UserPrinciple(
                 user.getId(),
                 user.getName(),
