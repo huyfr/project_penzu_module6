@@ -3,6 +3,8 @@ package pendzu.sduteam.models;
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import java.time.LocalDateTime;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 @Table(name = "albums")
@@ -24,7 +26,7 @@ public class Album {
     @JoinTable(name = "diaries_attachment",
             joinColumns = @JoinColumn(name = "diaries_id"),
             inverseJoinColumns = @JoinColumn(name = "attachments_id"))
-    private String attachment;
+    private Set<Attachment> attachment = new HashSet<>();
 
     @ManyToOne(targetEntity = User.class)
     @JoinColumn(name = "users_id")
@@ -43,7 +45,7 @@ public class Album {
 
     private int status = 1;
 
-    public Album(@NotBlank String title, @NotBlank Tag tag, String attachment, User user, String blobstring, Reaction reaction, LocalDateTime createdate, LocalDateTime updatedate, int status) {
+    public Album(@NotBlank String title, @NotBlank Tag tag, Set<Attachment> attachment, User user, String blobstring, Reaction reaction, LocalDateTime createdate, LocalDateTime updatedate, int status) {
         this.title = title;
         this.tag = tag;
         this.attachment = attachment;
@@ -55,7 +57,7 @@ public class Album {
         this.status = status;
     }
 
-    public Album(@NotBlank String title, @NotBlank Tag tag, String attachment, User user) {
+    public Album(@NotBlank String title, @NotBlank Tag tag, Set<Attachment> attachment, User user) {
         this.title = title;
         this.tag = tag;
         this.attachment = attachment;
@@ -89,11 +91,11 @@ public class Album {
         this.tag = tag;
     }
 
-    public String getAttachment() {
+    public Set<Attachment> getAttachment() {
         return attachment;
     }
 
-    public void setAttachment(String attachment) {
+    public void setAttachment(Set<Attachment> attachment) {
         this.attachment = attachment;
     }
 
