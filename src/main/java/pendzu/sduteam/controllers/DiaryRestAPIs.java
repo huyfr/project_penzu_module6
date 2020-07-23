@@ -1,6 +1,10 @@
 package pendzu.sduteam.controllers;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -47,7 +51,7 @@ public class DiaryRestAPIs {
 //    }
 
     @DeleteMapping("/dairy/{id}")
-    public ResponseEntity<Void> remove(@PathVariable Long id){
+    public ResponseEntity<Void> remove(@PathVariable Long id) {
         this.diaryService.delete(id);
         return new ResponseEntity<>(HttpStatus.OK);
     }
@@ -57,11 +61,11 @@ public class DiaryRestAPIs {
     @GetMapping("/diary")
     public ResponseEntity<?> getListDiary() {
         List<Diary> diaries = (List<Diary>) diaryService.findAll();
-        if(diaries.isEmpty()) {
+        if (diaries.isEmpty()) {
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         }
 
-        return new ResponseEntity<>(diaries,HttpStatus.OK);
+        return new ResponseEntity<>(diaries, HttpStatus.OK);
     }
 
     @GetMapping("/diary/{id}")
@@ -108,5 +112,16 @@ public class DiaryRestAPIs {
         diaryService.save(diary1.get());
 
         return new ResponseEntity<>(diary1, HttpStatus.OK);
+    }
+
+    @GetMapping
+    public ResponseEntity<List<Diary>> getAllDiary(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "2") int size
+    ) {
+        Pageable pageable = PageRequest.of(page, size);
+        Page<Diary> list = diaryService.findAll(pageable);
+
+        return new ResponseEntity(list, new HttpHeaders(), HttpStatus.OK);
     }
 }
