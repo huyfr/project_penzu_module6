@@ -1,6 +1,10 @@
 package pendzu.sduteam.controllers;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -15,36 +19,46 @@ import java.util.Optional;
 @CrossOrigin(origins = "*")
 public class DiaryRestController {
 
-    @Autowired
-    private IDiaryService diaryService;
+  @Autowired
+  private IDiaryService diaryService;
 
-    @GetMapping()
-    public ResponseEntity<Iterable<Diary>> getAllDiary(Diary diary){
-        return ResponseEntity.ok(this.diaryService.findAll());
-    }
+  //    @GetMapping()
+//    public ResponseEntity<Iterable<Diary>> getAllDiary(Diary diary){
+//        return ResponseEntity.ok(this.diaryService.findAll());
+//    }
+  @GetMapping
+  public ResponseEntity<List<Diary>> getAllDiary(
+    @RequestParam(defaultValue = "0") int page,
+    @RequestParam(defaultValue = "1") int size
+   ) {
+    Pageable pageable = PageRequest.of(page, size);
+    Page<Diary> list =  diaryService.findAll(pageable);
 
-    @GetMapping("/{id}")
-    public ResponseEntity<Optional<Diary>> getById(@PathVariable Long id){
-        try {
-            return ResponseEntity.ok(this.diaryService.findById(id));
-        } catch (Exception e){
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
-    }
+    return new ResponseEntity(list, new HttpHeaders(), HttpStatus.OK);
+  }
 
-    @PostMapping
-    public ResponseEntity<Diary> create(@RequestBody Diary diary){
-        return ResponseEntity.ok(this.diaryService.create(diary));
+  @GetMapping("/{id}")
+  public ResponseEntity<Optional<Diary>> getById(@PathVariable Long id) {
+    try {
+      return ResponseEntity.ok(this.diaryService.findById(id));
+    } catch (Exception e) {
+      return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
+  }
 
-    @PutMapping
-    public ResponseEntity<Diary> update(@RequestBody Diary diary){
-        return ResponseEntity.ok(this.diaryService.save(diary));
-    }
+  @PostMapping
+  public ResponseEntity<Diary> create(@RequestBody Diary diary) {
+    return ResponseEntity.ok(this.diaryService.create(diary));
+  }
 
-    @DeleteMapping("/{id}")
-    public ResponseEntity<Void> remove(@PathVariable Long id){
-        this.diaryService.delete(id);
-        return new ResponseEntity<>(HttpStatus.OK);
-    }
+  @PutMapping
+  public ResponseEntity<Diary> update(@RequestBody Diary diary) {
+    return ResponseEntity.ok(this.diaryService.save(diary));
+  }
+
+  @DeleteMapping("/{id}")
+  public ResponseEntity<Void> remove(@PathVariable Long id) {
+    this.diaryService.delete(id);
+    return new ResponseEntity<>(HttpStatus.OK);
+  }
 }
