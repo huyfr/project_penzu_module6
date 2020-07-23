@@ -17,6 +17,7 @@ public class TagFormatter implements Formatter<Tag> {
   public TagFormatter (TagServiceIpml tagService){
     this.tagService = tagService;
   }
+
   @Override
   public Tag parse(String text, Locale locale) throws ParseException {
     Optional<Tag> optionalTag= tagService.findById(Long.parseLong(text));
@@ -26,6 +27,6 @@ public class TagFormatter implements Formatter<Tag> {
 
   @Override
   public String print(Tag object, Locale locale) {
-    return null;
+    return object.toString();
   }
 }

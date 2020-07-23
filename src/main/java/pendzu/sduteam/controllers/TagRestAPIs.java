@@ -39,13 +39,13 @@ public class TagRestAPIs {
     return new ResponseEntity<>(tag, HttpStatus.OK);
   }
 
-  @PostMapping("/tag")
+  @PostMapping("/create")
   public ResponseEntity<Tag> createCustomer(@Valid @RequestBody Tag tag) {
     tagService.save(tag);
     return new ResponseEntity<>(HttpStatus.OK);
   }
 
-  @PutMapping("/tag/{id}")
+  @PutMapping("/edit/{id}")
   public ResponseEntity<?> editTag(@PathVariable Long id, @RequestBody Tag tag) {
     Optional<Tag> tagOptional = tagService.findById(id);
     if (tagOptional == null) {
@@ -57,7 +57,7 @@ public class TagRestAPIs {
     return new ResponseEntity<>(tagOptional , HttpStatus.OK);
   }
 
-  @DeleteMapping("/tag/{id}")
+  @DeleteMapping("/delete/{id}")
   public ResponseEntity<Void> remove(@PathVariable Long id){
     this.tagService.delete(id);
     return new ResponseEntity<>(HttpStatus.OK);

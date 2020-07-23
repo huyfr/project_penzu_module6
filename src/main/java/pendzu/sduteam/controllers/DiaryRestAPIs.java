@@ -82,8 +82,9 @@ public class DiaryRestAPIs {
     @PostMapping("/diary")
     public ResponseEntity<?> createDiary(@Valid @RequestBody Diary diary) {
 
-        LocalDateTime now = LocalDateTime.now();
-        diary.setCreatedate(now);
+//        LocalDateTime now = LocalDateTime.now();
+//        diary.setCreatedate(now);
+        diary.setCreatedate(LocalDateTime.now());
         diaryService.save(diary);
 
         return new ResponseEntity<>(diary, HttpStatus.CREATED);
