@@ -42,7 +42,7 @@ public class DiaryRestController {
         return ResponseEntity.ok(this.diaryService.save(diary));
     }
 
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/delete/{id}")
     public ResponseEntity<Void> remove(@PathVariable Long id){
         this.diaryService.delete(id);
         return new ResponseEntity<>(HttpStatus.OK);
