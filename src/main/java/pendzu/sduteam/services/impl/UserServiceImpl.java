@@ -6,6 +6,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.stereotype.Service;
+import pendzu.sduteam.models.Diary;
 import pendzu.sduteam.models.User;
 import pendzu.sduteam.repositories.IUserRepository;
 import pendzu.sduteam.services.IUserService;
@@ -20,6 +21,9 @@ public class UserServiceImpl implements IUserService {
 
     @Value("${user.block}")
     private int blockUserStatus;
+
+    @Value("${user.active}")
+    private int activeUserStatus;
 
     @Autowired
     private IUserRepository repository;
@@ -74,6 +78,19 @@ public class UserServiceImpl implements IUserService {
         User user = userOptional.get();
 
         user.setStatus(blockUserStatus);
+        repository.save(user);
+    }
+
+    @Override
+    public Page<User> findAllUserPagination(Pageable pageable) {
+        return repository.findAll(pageable);
+    }
+
+    public void activeUser(Long id) {
+        Optional<User> userOptional = repository.findById(id);
+        User user = userOptional.get();
+
+        user.setStatus(activeUserStatus);
         repository.save(user);
     }
 }

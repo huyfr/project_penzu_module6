@@ -43,7 +43,7 @@ public class User {
     @Size(min = 6, max = 128)
     private String password;
 
-    @JsonIgnore
+//    @JsonIgnore
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(name = "user_roles",
             joinColumns = @JoinColumn(name = "user_id"),
