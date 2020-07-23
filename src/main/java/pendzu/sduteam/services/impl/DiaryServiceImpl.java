@@ -47,8 +47,8 @@ public class DiaryServiceImpl implements IDiaryService {
 //    }
 
   @Override
-  public void delete(Long id) {
-
+  public Diary create(Diary diary) {
+    return diaryRepository.save(diary);
   }
 
   @Override
@@ -57,7 +57,11 @@ public class DiaryServiceImpl implements IDiaryService {
   }
 
   @Override
-    public Diary create(Diary diary) {
-        return diaryRepository.save(diary);
+  public void delete(Long id) {
+    Optional<Diary> diary = diaryRepository.findById(id);
+    if (diary != null){
+      diary.get().setStatus(deleteStatus);
     }
+  }
+
 }

@@ -26,16 +26,6 @@ public class DiaryRestController {
 //    public ResponseEntity<Iterable<Diary>> getAllDiary(Diary diary){
 //        return ResponseEntity.ok(this.diaryService.findAll());
 //    }
-  @GetMapping
-  public ResponseEntity<List<Diary>> getAllDiary(
-    @RequestParam(defaultValue = "0") int page,
-    @RequestParam(defaultValue = "1") int size
-   ) {
-    Pageable pageable = PageRequest.of(page, size);
-    Page<Diary> list =  diaryService.findAll(pageable);
-
-    return new ResponseEntity(list, new HttpHeaders(), HttpStatus.OK);
-  }
 
   @GetMapping("/{id}")
   public ResponseEntity<Optional<Diary>> getById(@PathVariable Long id) {
@@ -61,4 +51,16 @@ public class DiaryRestController {
     this.diaryService.delete(id);
     return new ResponseEntity<>(HttpStatus.OK);
   }
+
+  @GetMapping
+  public ResponseEntity<List<Diary>> getAllDiary(
+    @RequestParam(defaultValue = "0") int page,
+    @RequestParam(defaultValue = "2") int size
+  ) {
+    Pageable pageable = PageRequest.of(page, size);
+    Page<Diary> list =  diaryService.findAll(pageable);
+
+    return new ResponseEntity(list, new HttpHeaders(), HttpStatus.OK);
+  }
+
 }
