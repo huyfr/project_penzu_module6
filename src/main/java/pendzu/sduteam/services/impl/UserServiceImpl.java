@@ -3,6 +3,8 @@ package pendzu.sduteam.services.impl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.PropertySource;
 import org.springframework.stereotype.Service;
 import pendzu.sduteam.models.User;
 import pendzu.sduteam.repositories.IUserRepository;
@@ -11,7 +13,14 @@ import pendzu.sduteam.services.IUserService;
 import java.util.Optional;
 
 @Service
+@PropertySource({"classpath:status.properties"})
 public class UserServiceImpl implements IUserService {
+    @Value("${user.deleted}")
+    private int deleteUserStatus;
+
+    @Value("${user.block}")
+    private int blockUserStatus;
+
     @Autowired
     private IUserRepository repository;
 
@@ -52,11 +61,19 @@ public class UserServiceImpl implements IUserService {
 
     @Override
     public void delete(Long id) {
-        repository.deleteById(id);
+        Optional<User> userOptional = repository.findById(id);
+        User user = userOptional.get();
+
+        user.setStatus(deleteUserStatus);
+        repository.save(user);
     }
 
-//  @Override
-//  public Page<User> findAll(Pageable pageable) {
-//    return null;
-//  }
+    @Override
+    public void blockUser(Long id) {
+        Optional<User> userOptional = repository.findById(id);
+        User user = userOptional.get();
+
+        user.setStatus(blockUserStatus);
+        repository.save(user);
+    }
 }

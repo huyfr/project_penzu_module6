@@ -15,6 +15,22 @@ public class Attachment {
 
     private int status = 1;
 
+    private String blobstring;
+
+    public Attachment(@NotBlank String url, int status, String blobstring) {
+        this.url = url;
+        this.status = status;
+        this.blobstring = blobstring;
+    }
+
+    public String getBlobstring() {
+        return blobstring;
+    }
+
+    public void setBlobstring(String blobstring) {
+        this.blobstring = blobstring;
+    }
+
     public Attachment(@NotBlank String url, int status) {
         this.url = url;
         this.status = status;
