@@ -12,12 +12,12 @@ import java.util.List;
 @RequestMapping("/api/sdu")
 @RestController
 @CrossOrigin(origins = "*")
-public class UserRestController {
+public class UserRestAPIs {
 
     @Autowired
     private UserServiceImpl userService;
 
-    @GetMapping("/userList")
+    @GetMapping("/user")
     public ResponseEntity<List<User>> showListUser(){
         return ResponseEntity.ok((List<User>) userService.findAll());
     }
