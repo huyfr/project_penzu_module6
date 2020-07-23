@@ -83,7 +83,7 @@ public class UserServiceImpl implements IUserService {
 
     @Override
     public Page<User> findAllUserPagination(Pageable pageable) {
-        return repository.findAll(pageable);
+        return repository.findAllByStatusAndStatus(pageable);
     }
 
     public void activeUser(Long id) {

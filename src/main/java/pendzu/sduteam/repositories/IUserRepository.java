@@ -15,5 +15,7 @@ public interface IUserRepository extends PagingAndSortingRepository<User, Long> 
     Boolean existsByEmail(String email);
     Boolean existsByUsername(String username);
     Iterable<User> findUsersByNameContaining(String user_name);
-    Page<User> findAllByStatusAndStatus(int number1, int number2, Pageable pageable);
+
+    @Query("select u from User u where u.status >= 0")
+    Page<User> findAllByStatusAndStatus(Pageable pageable);
 }
