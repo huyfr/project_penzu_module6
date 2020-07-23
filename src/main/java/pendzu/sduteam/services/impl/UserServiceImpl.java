@@ -1,12 +1,11 @@
 package pendzu.sduteam.services.impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.PropertySource;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-import pendzu.sduteam.models.Diary;
 import pendzu.sduteam.models.User;
 import pendzu.sduteam.repositories.IUserRepository;
 import pendzu.sduteam.services.IUserService;
