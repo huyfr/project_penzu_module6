@@ -76,9 +76,4 @@ public class UserServiceImpl implements IUserService {
         user.setStatus(blockUserStatus);
         repository.save(user);
     }
-
-  @Override
-  public Page<User> findAll(Pageable pageable) {
-    return null;
-  }
 }

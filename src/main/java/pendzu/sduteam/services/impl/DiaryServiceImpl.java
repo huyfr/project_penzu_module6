@@ -37,31 +37,22 @@ public class DiaryServiceImpl implements IDiaryService {
         return diaryRepository.save(diary);
     }
 
-
-//    @Override
-//    public void delete(Long id) {
-//        Diary diary = diaryRepository.getOne(id);
-//        if (diary != null){
-//            diary.setStatus(deleteStatus);
-//        }
-//    }
-
-  @Override
-  public Diary create(Diary diary) {
-    return diaryRepository.save(diary);
-  }
-
-  @Override
-  public Page<Diary> findAll(Pageable pageable) {
-    return diaryRepository.findAll(pageable);
-  }
-
-  @Override
-  public void delete(Long id) {
-    Optional<Diary> diary = diaryRepository.findById(id);
-    if (diary != null){
-      diary.get().setStatus(deleteStatus);
+    @Override
+    public Diary create(Diary diary) {
+        return diaryRepository.save(diary);
     }
-  }
+
+    @Override
+    public Page<Diary> findAll(Pageable pageable) {
+        return diaryRepository.findAll(pageable);
+    }
+
+    @Override
+    public void delete(Long id) {
+        Optional<Diary> diary = diaryRepository.findById(id);
+        if (diary != null) {
+            diary.get().setStatus(deleteStatus);
+        }
+    }
 
 }
