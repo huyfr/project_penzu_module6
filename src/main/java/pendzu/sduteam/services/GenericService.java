@@ -10,5 +10,4 @@ public interface GenericService<T> {
     T save(T model);
 
     void delete(Long id);
-
 }
