@@ -1,6 +1,10 @@
 package pendzu.sduteam.controllers;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -22,10 +26,10 @@ public class DiaryRestAPIs {
 
     /*Dang Linh*/
 
-//    @GetMapping()
-//    public ResponseEntity<Iterable<Diary>> getAllDiary(Diary diary){
-//        return ResponseEntity.ok(this.diaryService.findAll());
-//    }
+    @GetMapping("/diaries")
+    public ResponseEntity<Iterable<Diary>> getAllDiaryTitle(Diary diary){
+        return ResponseEntity.ok(this.diaryService.findAll());
+    }
 //
 //    @GetMapping("/{id}")
 //    public ResponseEntity<Optional<Diary>> getById(@PathVariable Long id){
@@ -108,5 +112,16 @@ public class DiaryRestAPIs {
         diaryService.save(diary1.get());
 
         return new ResponseEntity<>(diary1, HttpStatus.OK);
+    }
+
+    @GetMapping
+    public ResponseEntity<List<Diary>> getAllDiary(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "2") int size
+    ) {
+        Pageable pageable = PageRequest.of(page, size);
+        Page<Diary> list =  diaryService.findAll(pageable);
+
+        return new ResponseEntity(list, new HttpHeaders(), HttpStatus.OK);
     }
 }
