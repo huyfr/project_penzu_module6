@@ -14,6 +14,5 @@ public interface GenericService<T> {
 
     void delete(Long id);
 
-    Page<T> findAll(Pageable pageable);
 
 }

@@ -55,8 +55,8 @@ public class UserServiceImpl implements IUserService {
         repository.deleteById(id);
     }
 
-  @Override
-  public Page<User> findAll(Pageable pageable) {
-    return null;
-  }
+//  @Override
+//  public Page<User> findAll(Pageable pageable) {
+//    return null;
+//  }
 }
