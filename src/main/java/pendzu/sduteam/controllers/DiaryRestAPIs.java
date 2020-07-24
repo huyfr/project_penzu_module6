@@ -111,17 +111,30 @@ public class DiaryRestAPIs {
 
         diaryService.save(diary1.get());
 
-        return new ResponseEntity<>(diary1, HttpStatus.OK);
-    }
+    return new ResponseEntity<>(diary1, HttpStatus.OK);
+  }
 
-    @GetMapping
-    public ResponseEntity<List<Diary>> getAllDiary(
-            @RequestParam(defaultValue = "0") int page,
-            @RequestParam(defaultValue = "2") int size
-    ) {
-        Pageable pageable = PageRequest.of(page, size);
-        Page<Diary> list = diaryService.findAll(pageable);
+  @GetMapping
+  public ResponseEntity<List<Diary>> getAllDiary(
+    @RequestParam(defaultValue = "0") int page,
+    @RequestParam(defaultValue = "2") int size
+  ) {
+    Pageable pageable = PageRequest.of(page, size);
+    Page<Diary> list = diaryService.findAll(pageable);
 
-        return new ResponseEntity(list, new HttpHeaders(), HttpStatus.OK);
+    return new ResponseEntity(list, new HttpHeaders(), HttpStatus.OK);
+  }
+
+  @GetMapping(value = "diary/user/{idUser}")
+  public ResponseEntity<List<Diary>> listDiaryByUser(
+    @PathVariable("idUser") long idUser,
+    @RequestParam(defaultValue = "0") int page,
+    @RequestParam(defaultValue = "2") int size) {
+    Pageable pageable = PageRequest.of(page, size);
+    Page<Diary> listByUser = diaryService.getDiariesByUserId(pageable,idUser);
+    if (listByUser.isEmpty()) {
+      return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
+    return new ResponseEntity(listByUser, HttpStatus.OK);
+  }
 }
