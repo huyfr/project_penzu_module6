@@ -48,8 +48,8 @@ public class DiaryServiceImpl implements IDiaryService {
     }
 
   @Override
-  public Page<Diary> getDiariesByUserId(Pageable pageable, Long idUser) {
-    return diaryRepository.getDiariesByUserId(pageable,idUser);
+  public Page<Diary> findAllByUserIdAndStatus(Pageable pageable, Long id, int status) {
+    return diaryRepository.findAllByUserIdAndStatus(pageable, id, status);
   }
 
   @Override
