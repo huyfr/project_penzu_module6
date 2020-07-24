@@ -22,24 +22,24 @@ public class UserRestAPIs {
     @Autowired
     private UserServiceImpl userService;
 
-    @GetMapping("/user")
+    @GetMapping("/admin/user")
     public ResponseEntity<List<User>> showListUser(){
         return ResponseEntity.ok((List<User>) userService.findAll());
     }
 
-    @DeleteMapping("/user/{id}")
+    @DeleteMapping("/admin/user/{id}")
     public ResponseEntity<Void> deleteUser(@PathVariable Long id){
         userService.delete(id);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
-    @DeleteMapping("/user/block/{id}")
+    @DeleteMapping("/admin/user/block/{id}")
     public ResponseEntity<Void> blockUser(@PathVariable Long id){
         userService.blockUser(id);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
-    @DeleteMapping("/user/active/{id}")
+    @DeleteMapping("/admin/user/active/{id}")
     public ResponseEntity<Void> activeUser(@PathVariable Long id){
         userService.activeUser(id);
         return new ResponseEntity<>(HttpStatus.OK);
@@ -60,5 +60,12 @@ public class UserRestAPIs {
         Optional<User> userOptional = userService.findById(id);
         User user = userOptional.get();
         return new ResponseEntity<>(user, HttpStatus.OK);
+    }
+
+    @PutMapping("/admin/edit/{id}")
+    public ResponseEntity<User> editUser (@PathVariable Long id, @RequestBody User user){
+        user.setId(id);
+        this.userService.save(user);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 }
