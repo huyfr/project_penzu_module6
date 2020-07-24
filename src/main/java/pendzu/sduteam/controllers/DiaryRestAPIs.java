@@ -117,7 +117,7 @@ public class DiaryRestAPIs {
     @GetMapping
     public ResponseEntity<List<Diary>> getAllDiary(
             @RequestParam(defaultValue = "0") int page,
-            @RequestParam(defaultValue = "2") int size
+            @RequestParam(defaultValue = "5") int size
     ) {
         Pageable pageable = PageRequest.of(page, size);
         Page<Diary> list =  diaryService.findAll(pageable);
