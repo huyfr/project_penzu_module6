@@ -21,7 +21,7 @@ public class TagRestAPIs {
   @Autowired
   TagServiceIpml tagService;
 
-  @GetMapping("/tags")
+  @GetMapping("/tag")
   public ResponseEntity<?> getListTag() {
     List<Tag> tags = (List<Tag>) tagService.findAll();
     if(tags.isEmpty()) {
@@ -48,11 +48,11 @@ public class TagRestAPIs {
   @PutMapping("/edit/{id}")
   public ResponseEntity<?> editTag(@PathVariable Long id, @RequestBody Tag tag) {
     Optional<Tag> tagOptional = tagService.findById(id);
-    if (tagOptional == null) {
+    if (!tagOptional.isPresent()) {
       return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
     tagOptional.get().setStatus(tag.getStatus());
-    tagOptional.get().setTagname(tag.getTagname());
+    tagOptional.get().setName(tag.getName());
     tagService.save(tagOptional.get());
     return new ResponseEntity<>(tagOptional , HttpStatus.OK);
   }

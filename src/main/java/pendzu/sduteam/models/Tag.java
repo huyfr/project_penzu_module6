@@ -11,15 +11,15 @@ public class Tag {
     Long id;
 
     @NotBlank
-    private String tagname;
+    private String name;
 
     private int status = 1;
 
     public Tag() {
     }
 
-    public Tag(@NotBlank String tagname, int status) {
-        this.tagname = tagname;
+    public Tag(@NotBlank String name, int status) {
+        this.name = name;
         this.status = status;
     }
 
@@ -31,12 +31,12 @@ public class Tag {
         this.id = id;
     }
 
-    public String getTagname() {
-        return tagname;
+    public String getName() {
+        return name;
     }
 
-    public void setTagname(String tagname) {
-        this.tagname = tagname;
+    public void setName(String name) {
+        this.name = name;
     }
 
     public int getStatus() {

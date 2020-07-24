@@ -24,10 +24,10 @@ public class DiaryRestAPIs {
     @Autowired
     private IDiaryService diaryService;
 
-    @GetMapping("/diaries")
-    public ResponseEntity<Iterable<Diary>> getAllDiaryTitle(Diary diary){
-        return ResponseEntity.ok(this.diaryService.findAll());
-    }
+//    @GetMapping("/diaries")
+//    public ResponseEntity<Iterable<Diary>> getAllDiaryTitle(Diary diary){
+//        return ResponseEntity.ok(this.diaryService.findAll());
+//    }
 
     /*-Tuan*/
 
@@ -111,7 +111,7 @@ public class DiaryRestAPIs {
         return new ResponseEntity(list, new HttpHeaders(), HttpStatus.OK);
     }
 
-    @DeleteMapping("/delete/{id}")
+    @DeleteMapping("/diary/{id}")
     public ResponseEntity<Void> remove(@PathVariable Long id){
         this.diaryService.changeStatus(id);
         return new ResponseEntity<>(HttpStatus.OK);
