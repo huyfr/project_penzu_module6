@@ -24,36 +24,9 @@ public class DiaryRestAPIs {
     @Autowired
     private IDiaryService diaryService;
 
-    /*Dang Linh*/
-
-//    @GetMapping()
-//    public ResponseEntity<Iterable<Diary>> getAllDiary(Diary diary){
-//        return ResponseEntity.ok(this.diaryService.findAll());
-//    }
-//
-//    @GetMapping("/{id}")
-//    public ResponseEntity<Optional<Diary>> getById(@PathVariable Long id){
-//        try {
-//            return ResponseEntity.ok(this.diaryService.findById(id));
-//        } catch (Exception e){
-//            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-//        }
-//    }
-
-//    @PostMapping
-//    public ResponseEntity<Diary> create(@RequestBody Diary diary){
-//        return ResponseEntity.ok(this.diaryService.create(diary));
-//    }
-
-//    @PutMapping
-//    public ResponseEntity<Diary> update(@RequestBody Diary diary){
-//        return ResponseEntity.ok(this.diaryService.save(diary));
-//    }
-
-    @DeleteMapping("/dairy/{id}")
-    public ResponseEntity<Void> remove(@PathVariable Long id) {
-        this.diaryService.delete(id);
-        return new ResponseEntity<>(HttpStatus.OK);
+    @GetMapping("/diaries")
+    public ResponseEntity<Iterable<Diary>> getAllDiaryTitle(Diary diary){
+        return ResponseEntity.ok(this.diaryService.findAll());
     }
 
     /*-Tuan*/
@@ -114,17 +87,6 @@ public class DiaryRestAPIs {
     return new ResponseEntity<>(diary1, HttpStatus.OK);
   }
 
-  @GetMapping
-  public ResponseEntity<List<Diary>> getAllDiary(
-    @RequestParam(defaultValue = "0") int page,
-    @RequestParam(defaultValue = "2") int size
-  ) {
-    Pageable pageable = PageRequest.of(page, size);
-    Page<Diary> list = diaryService.findAll(pageable);
-
-    return new ResponseEntity(list, new HttpHeaders(), HttpStatus.OK);
-  }
-
   @GetMapping(value = "diary/user/{idUser}")
   public ResponseEntity<List<Diary>> listDiaryByUser(
     @PathVariable("idUser") long idUser,
@@ -137,4 +99,21 @@ public class DiaryRestAPIs {
     }
     return new ResponseEntity(listByUser, HttpStatus.OK);
   }
+
+    @GetMapping
+    public ResponseEntity<List<Diary>> getAllDiary(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "4") int size
+    ) {
+        Pageable pageable = PageRequest.of(page, size);
+        Page<Diary> list =  diaryService.findAll(pageable);
+
+        return new ResponseEntity(list, new HttpHeaders(), HttpStatus.OK);
+    }
+
+    @DeleteMapping("/delete/{id}")
+    public ResponseEntity<Void> remove(@PathVariable Long id){
+        this.diaryService.changeStatus(id);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
 }
