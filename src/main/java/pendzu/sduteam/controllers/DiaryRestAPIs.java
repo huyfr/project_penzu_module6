@@ -12,7 +12,9 @@ import pendzu.sduteam.models.Diary;
 import pendzu.sduteam.services.IDiaryService;
 
 import javax.validation.Valid;
+import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Optional;
 
@@ -82,9 +84,11 @@ public class DiaryRestAPIs {
   @PostMapping("/diary")
   public ResponseEntity<?> createDiary(@Valid @RequestBody Diary diary) {
 
-//        LocalDateTime now = LocalDateTime.now();
-//        diary.setCreatedate(now);
-    diary.setCreatedate(LocalDateTime.now());
+    LocalDateTime now = LocalDateTime.now();
+    diary.setCreatedate(now);
+//    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+//    String formatDateTime = now.format(formatter);
+//    diary.setCreatedate(LocalDateTime.parse(formatDateTime));
     diaryService.save(diary);
 
     return new ResponseEntity<>(diary, HttpStatus.CREATED);
@@ -118,7 +122,7 @@ public class DiaryRestAPIs {
   @GetMapping
   public ResponseEntity<List<Diary>> getAllDiary(
     @RequestParam(defaultValue = "0") int page,
-    @RequestParam(defaultValue = "2") int size
+    @RequestParam(defaultValue = "5") int size
   ) {
     Pageable pageable = PageRequest.of(page, size);
     Page<Diary> list = diaryService.findAll(pageable);
@@ -130,9 +134,9 @@ public class DiaryRestAPIs {
   public ResponseEntity<List<Diary>> listDiaryByUser(
     @PathVariable("idUser") long idUser,
     @RequestParam(defaultValue = "0") int page,
-    @RequestParam(defaultValue = "2") int size) {
+    @RequestParam(defaultValue = "5") int size) {
     Pageable pageable = PageRequest.of(page, size);
-    Page<Diary> listByUser = diaryService.getDiariesByUserId(pageable,idUser);
+    Page<Diary> listByUser = diaryService.getDiariesByUserId(pageable, idUser);
     if (listByUser.isEmpty()) {
       return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
