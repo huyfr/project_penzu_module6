@@ -6,7 +6,6 @@ import com.google.cloud.storage.Blob;
 import com.google.cloud.storage.BlobId;
 import com.google.cloud.storage.Bucket;
 import com.google.firebase.FirebaseApp;
-import com.google.firebase.FirebaseOptions;
 import com.google.firebase.cloud.StorageClient;
 import org.springframework.web.multipart.MultipartFile;
 import pendzu.sduteam.models.Album;
