@@ -16,29 +16,12 @@ import pendzu.sduteam.models.User;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.List;
 
 public abstract class FirebaseStorageService<T> {
     private StorageClient getFirebaseStorage() {
         try {
-            GoogleCredentials credentials = GoogleCredentials.getApplicationDefault();
-            FirebaseOptions firebaseOptions = FirebaseOptions.builder()
-                    .setCredentials(credentials)
-                    .setDatabaseUrl("https://project-sduteam.firebaseio.com")
-                    .setStorageBucket("project-sduteam.appspot.com")
-                    .build();
+            FirebaseApp firebaseApp = FirebaseAppService.getFirebaseApp();
 
-            FirebaseApp firebaseApp = null;
-            List<FirebaseApp> firebaseAppList = FirebaseApp.getApps();
-
-            if (firebaseAppList != null && firebaseAppList.isEmpty()) {
-                for (FirebaseApp app : firebaseAppList) {
-                    if (app.getName().equals(FirebaseApp.DEFAULT_APP_NAME))
-                        firebaseApp = app;
-                }
-            } else {
-                firebaseApp = FirebaseApp.initializeApp(firebaseOptions);
-            }
             return StorageClient.getInstance(firebaseApp);
         } catch (IOException e) {
             throw new RuntimeException("Could not get admin-sdk json file. Please try again!", e);
