@@ -8,6 +8,7 @@ import pendzu.sduteam.models.User;
 import pendzu.sduteam.services.impl.UserServiceImpl;
 
 import java.util.List;
+import java.util.Optional;
 
 @RequestMapping("/api/sdu")
 @RestController
@@ -18,20 +19,29 @@ public class UserRestAPIs {
     private UserServiceImpl userService;
 
     @GetMapping("/user")
-    public ResponseEntity<List<User>> showListUser(){
+    public ResponseEntity<List<User>> showListUser() {
         return ResponseEntity.ok((List<User>) userService.findAll());
     }
 
     @DeleteMapping("/user/{id}")
-    public ResponseEntity<Void> deleteUser(@PathVariable Long id){
+    public ResponseEntity<Void> deleteUser(@PathVariable Long id) {
         userService.delete(id);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
     @DeleteMapping("/user/block/{id}")
-    public ResponseEntity<Void> blockUser(@PathVariable Long id){
+    public ResponseEntity<Void> blockUser(@PathVariable Long id) {
         userService.blockUser(id);
         return new ResponseEntity<>(HttpStatus.OK);
     }
+
+//    @GetMapping("/user/{id}")
+//    public ResponseEntity<?> getUser(@PathVariable Long id) {
+//        Optional<User> user = userService.findById(id);
+//        if (!user.isPresent()) {
+//            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+//        }
+//        return new ResponseEntity<>(user, HttpStatus.OK);
+//    }
 
 }
