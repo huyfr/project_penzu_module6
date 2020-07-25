@@ -4,12 +4,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import pendzu.sduteam.models.Diary;
+import pendzu.sduteam.message.request.SearchTagByNameTag;
 import pendzu.sduteam.models.Tag;
-import pendzu.sduteam.services.impl.TagServiceIpml;
+import pendzu.sduteam.services.IDiaryService;
+import pendzu.sduteam.services.impl.TagServiceImpl;
 
 import javax.validation.Valid;
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -19,7 +19,10 @@ import java.util.Optional;
 public class TagRestAPIs {
 
   @Autowired
-  TagServiceIpml tagService;
+  private TagServiceImpl tagService;
+
+  @Autowired
+  private IDiaryService diaryService;
 
   @GetMapping("/tag")
   public ResponseEntity<?> getListTag() {
@@ -69,6 +72,25 @@ public class TagRestAPIs {
     tagService.save(tag);
 
     return new ResponseEntity<>(tag,HttpStatus.CREATED);
+  }
+
+  @PostMapping("/tag/search-by-name")
+  public ResponseEntity<?> searchTagByNameTag(@RequestBody SearchTagByNameTag tagForm) {
+    if(tagForm.getName().equals("") || tagForm.getName() == null ) {
+      List<Tag> tags = (List<Tag>) tagService.findAll();
+      if(tags.isEmpty()) {
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+      } else {
+        return new ResponseEntity<>(tags,HttpStatus.OK);
+      }
+    }
+
+    List<Tag> tags = (List<Tag>) tagService.findTagsByNameContaining(tagForm.getName());
+    if(tags.isEmpty()) {
+      return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    } else {
+      return new ResponseEntity<>(tags,HttpStatus.OK);
+    }
   }
 
 }
