@@ -111,7 +111,7 @@ public class DiaryRestAPIs {
         return new ResponseEntity(list, new HttpHeaders(), HttpStatus.OK);
     }
 
-    @DeleteMapping("/delete/{id}")
+    @DeleteMapping("/dairy/delete/{id}")
     public ResponseEntity<Void> remove(@PathVariable Long id){
         this.diaryService.changeStatus(id);
         return new ResponseEntity<>(HttpStatus.OK);

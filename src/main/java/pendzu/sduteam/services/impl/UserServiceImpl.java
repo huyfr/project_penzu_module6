@@ -6,11 +6,14 @@ import org.springframework.context.annotation.PropertySource;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import pendzu.sduteam.models.Role;
 import pendzu.sduteam.models.User;
 import pendzu.sduteam.repositories.IUserRepository;
 import pendzu.sduteam.services.IUserService;
 
+import java.util.HashSet;
 import java.util.Optional;
+import java.util.Set;
 
 @Service
 @PropertySource({"classpath:status.properties"})
@@ -80,9 +83,10 @@ public class UserServiceImpl implements IUserService {
         repository.save(user);
     }
 
+
     @Override
-    public Page<User> findAllUserPagination(Pageable pageable) {
-        return repository.findAllByStatusAndStatus(pageable);
+    public Page<User> findAllUserPagination(Pageable pageable, Set<Role> role) {
+        return repository.findAllByRoles(pageable, role);
     }
 
     public void activeUser(Long id) {
@@ -91,5 +95,10 @@ public class UserServiceImpl implements IUserService {
 
         user.setStatus(activeUserStatus);
         repository.save(user);
+    }
+
+    @Override
+    public Page<User> findAllUserPagination(Pageable pageable) {
+        return null;
     }
 }
