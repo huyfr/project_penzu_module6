@@ -18,4 +18,7 @@ public interface IDiaryRepository extends PagingAndSortingRepository<Diary, Long
 
     Page<Diary> findAllByOrderByCreatedateDesc(Pageable pageable);
 
+    Iterable<Diary> findDiariesByTagIdAndTitleContaining(Long tag_id, String title);
+    Iterable<Diary> findDiariesByTitleContainingAndUserId(String title, Long user_id);
+
 }
