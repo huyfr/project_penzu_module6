@@ -4,7 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.Formatter;
 import org.springframework.stereotype.Component;
 import pendzu.sduteam.models.Tag;
-import pendzu.sduteam.services.impl.TagServiceIpml;
+import pendzu.sduteam.services.impl.TagServiceImpl;
 
 import java.text.ParseException;
 import java.util.Locale;
@@ -12,9 +12,9 @@ import java.util.Optional;
 
 @Component
 public class TagFormatter implements Formatter<Tag> {
-  TagServiceIpml tagService;
+  TagServiceImpl tagService;
   @Autowired
-  public TagFormatter (TagServiceIpml tagService){
+  public TagFormatter (TagServiceImpl tagService){
     this.tagService = tagService;
   }
 

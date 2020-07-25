@@ -11,6 +11,9 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import pendzu.sduteam.message.request.SearchDiaryByTagAndTitle;
+import pendzu.sduteam.message.request.SearchDiaryByTitle;
+import pendzu.sduteam.message.request.SearchDiaryByTitleAndUserId;
 import pendzu.sduteam.models.Diary;
 import pendzu.sduteam.services.IDiaryService;
 import pendzu.sduteam.services.impl.DiaryFirebaseServiceExtends;
@@ -138,5 +141,87 @@ public class DiaryRestAPIs {
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         }
         return new ResponseEntity<>(diaries, HttpStatus.OK);
+    }
+
+    @PostMapping("/diary/searchBy-Title-And-UserId")
+    public ResponseEntity<?> searchDiaryByTitleAndUserId(@RequestBody SearchDiaryByTitleAndUserId searchDiaryByTitleAndUserId) {
+        List<Diary> diaries;
+        if(searchDiaryByTitleAndUserId.getTitle().equals("")) {
+            diaries = (List<Diary>) diaryService.findAll();
+            if(diaries.isEmpty()) {
+                return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+            }
+            return new ResponseEntity<>(diaries,HttpStatus.OK);
+        }
+        diaries = (List<Diary>) diaryService.findDiariesByTitleContainingAndUserId(searchDiaryByTitleAndUserId.getTitle(), searchDiaryByTitleAndUserId.getId());
+        return new ResponseEntity<>(diaries,HttpStatus.OK);
+    }
+
+    @GetMapping("/diary/searchBy-TagId/{id}")
+    public ResponseEntity<?> searchByTagId(@PathVariable Long id) {
+        List<Diary> diaries = (List<Diary>) diaryService.findDiariesByTagId(id);
+
+        if (diaries.isEmpty()) {
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        }
+
+        return new ResponseEntity<>(diaries,HttpStatus.OK);
+    }
+
+    @PostMapping("/diary/search-by-title")
+    public ResponseEntity<?> searchDiaryByTitle(@RequestBody SearchDiaryByTitle titleForm) {
+        if (titleForm.getTitle().equals("") || titleForm.getTitle() == null ) {
+            List<Diary> diaries = (List<Diary>) diaryService.findAll();
+
+            if(diaries.isEmpty()) {
+                return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+            } else {
+                return new ResponseEntity<>(diaries,HttpStatus.OK);
+            }
+        }
+
+        List<Diary> diaries = (List<Diary>) diaryService.findDiariesByTitleContaining(titleForm.getTitle());
+        if(diaries.isEmpty()) {
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        } else {
+            return new ResponseEntity<>(diaries,HttpStatus.OK);
+        }
+    }
+
+    @PostMapping("/diary/search-by-tag-and-title")
+    public ResponseEntity<?> searchDiaryByTagAndTitle(@RequestBody SearchDiaryByTagAndTitle searchForm) {
+        if (searchForm.getTitle() == null && searchForm.getTagId() == null) {
+            List<Diary> diaries = (List<Diary>) diaryService.findAll();
+            if(diaries.isEmpty()) {
+                return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+            }
+            return new ResponseEntity<>(diaries,HttpStatus.OK);
+        }
+
+        if (searchForm.getTitle() == null && searchForm.getTagId() != null) {
+            List<Diary> diaries = (List<Diary>) diaryService.findDiariesByTagId(searchForm.getTagId());
+            if(diaries.isEmpty()) {
+                return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+            }
+            return new ResponseEntity<>(diaries,HttpStatus.OK);
+        }
+
+        if (searchForm.getTitle() != null && searchForm.getTagId() == null) {
+            List<Diary> diaries = (List<Diary>) diaryService.findDiariesByTitleContaining(searchForm.getTitle());
+            if(diaries.isEmpty()) {
+                return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+            }
+            return new ResponseEntity<>(diaries,HttpStatus.OK);
+        }
+
+        if (searchForm.getTagId() != null && searchForm.getTitle() != null) {
+            List<Diary> diaries = (List<Diary>) diaryService.findDiariesByTagIdAndTitleContaining(searchForm.getTagId(),searchForm.getTitle());
+            if(diaries.isEmpty()) {
+                return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+            }
+            return new ResponseEntity<>(diaries,HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 }
