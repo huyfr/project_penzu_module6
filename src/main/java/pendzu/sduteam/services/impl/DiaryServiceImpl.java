@@ -20,75 +20,75 @@ public class DiaryServiceImpl implements IDiaryService {
     private int deleteStatus;
 
     @Autowired
-    private IDiaryRepository repository;
+    private IDiaryRepository diaryRepository;
 
     @Override
     public Optional<Diary> findById(Long id) {
-        return repository.findById(id);
+        return diaryRepository.findById(id);
     }
 
     @Override
     public Iterable<Diary> findAll() {
-        return repository.findAll();
+        return diaryRepository.findAll();
     }
 
     @Override
     public Diary save(Diary diary) {
-        return repository.save(diary);
+        return diaryRepository.save(diary);
     }
 
     @Override
     public Diary create(Diary diary) {
-        return repository.save(diary);
+        return diaryRepository.save(diary);
     }
 
     @Override
     public Page<Diary> findAll(Pageable pageable) {
-        return repository.findAll(pageable);
+        return diaryRepository.findAll(pageable);
     }
 
   @Override
-  public Page<Diary> getDiariesByUserId(Pageable pageable, Long idUser) {
-    return repository.getDiariesByUserId(pageable,idUser);
+  public Page<Diary> findAllByUserIdAndStatus(Pageable pageable, Long id, int status) {
+    return diaryRepository.findAllByUserIdAndStatus(pageable, id, status);
   }
 
   @Override
     public void delete(Long id) {
-        repository.deleteById(id);
+        diaryRepository.deleteById(id);
     }
 
     @Override
     public void changeStatus(Long id) {
-        Optional<Diary> diaryOptional = repository.findById(id);
+        Optional<Diary> diaryOptional = diaryRepository.findById(id);
         Diary diary = diaryOptional.get();
         if (diary != null) {
             diary.setStatus(deleteStatus);
-            repository.save(diary);
+            diaryRepository.save(diary);
         }
     }
 
     @Override
     public Iterable<Diary> findDiariesByUserId(Long user_id) {
-        return repository.findDiariesByUserId(user_id);
+        return diaryRepository.findDiariesByUserId(user_id);
     }
 
     @Override
     public Iterable<Diary> findDiariesByTagId(Long tag_id) {
-        return repository.findDiariesByTagId(tag_id);
+        return diaryRepository.findDiariesByTagId(tag_id);
     }
 
     @Override
     public Iterable<Diary> findDiariesByTitleContaining(String title) {
-        return repository.findDiariesByTitleContaining(title);
+        return diaryRepository.findDiariesByTitleContaining(title);
     }
 
     @Override
     public Page<Diary> findAllByOrderByCreatedateAsc(Pageable pageable) {
-        return repository.findAllByOrderByCreatedateAsc(pageable);
+        return diaryRepository.findAllByOrderByCreatedateAsc(pageable);
     }
 
     @Override
     public Page<Diary> findAllByOrderByCreatedateDesc(Pageable pageable) {
-        return repository.findAllByOrderByCreatedateDesc(pageable);
+        return diaryRepository.findAllByOrderByCreatedateDesc(pageable);
     }
 }

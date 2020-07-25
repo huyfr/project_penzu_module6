@@ -6,13 +6,16 @@ import org.springframework.data.repository.PagingAndSortingRepository;
 import pendzu.sduteam.models.Diary;
 
 public interface IDiaryRepository extends PagingAndSortingRepository<Diary, Long> {
-  Page<Diary> getDiariesByUserId(Pageable pageable, Long idUser);
+    Page<Diary> findAllByUserIdAndStatus(Pageable pageable, Long id, int status);
 
-  Iterable<Diary> findDiariesByUserId(Long user_id);
-  Iterable<Diary> findDiariesByTagId(Long tag_id);
-  Iterable<Diary> findDiariesByTitleContaining(String title);
+    Iterable<Diary> findDiariesByUserId(Long user_id);
 
-  Page<Diary> findAllByOrderByCreatedateAsc(Pageable pageable);
-  Page<Diary> findAllByOrderByCreatedateDesc(Pageable pageable);
+    Iterable<Diary> findDiariesByTagId(Long tag_id);
+
+    Iterable<Diary> findDiariesByTitleContaining(String title);
+
+    Page<Diary> findAllByOrderByCreatedateAsc(Pageable pageable);
+
+    Page<Diary> findAllByOrderByCreatedateDesc(Pageable pageable);
 
 }
