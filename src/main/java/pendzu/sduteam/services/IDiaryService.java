@@ -19,4 +19,7 @@ public interface IDiaryService extends GenericService<Diary> {
 
     Page<Diary> findAllByOrderByCreatedateAsc(Pageable pageable);
     Page<Diary> findAllByOrderByCreatedateDesc(Pageable pageable);
+
+    Iterable<Diary> findDiariesByTitleContainingAndUserId(String title,Long user_id);
+    Iterable<Diary> findDiariesByTagIdAndTitleContaining(Long tag_id, String title);
 }
