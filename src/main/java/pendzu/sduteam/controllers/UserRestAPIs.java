@@ -2,17 +2,19 @@ package pendzu.sduteam.controllers;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import pendzu.sduteam.models.Role;
+import pendzu.sduteam.models.RoleName;
 import pendzu.sduteam.models.User;
 import pendzu.sduteam.services.impl.UserServiceImpl;
 
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @RequestMapping("/api/sdu")
 @RestController
@@ -23,24 +25,24 @@ public class UserRestAPIs {
     private UserServiceImpl userService;
 
     @GetMapping("/admin/user")
-    public ResponseEntity<List<User>> showListUser(){
+    public ResponseEntity<List<User>> showListUser() {
         return ResponseEntity.ok((List<User>) userService.findAll());
     }
 
     @DeleteMapping("/admin/user/{id}")
-    public ResponseEntity<Void> deleteUser(@PathVariable Long id){
+    public ResponseEntity<Void> deleteUser(@PathVariable Long id) {
         userService.delete(id);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
     @DeleteMapping("/admin/user/block/{id}")
-    public ResponseEntity<Void> blockUser(@PathVariable Long id){
+    public ResponseEntity<Void> blockUser(@PathVariable Long id) {
         userService.blockUser(id);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
     @DeleteMapping("/admin/user/active/{id}")
-    public ResponseEntity<Void> activeUser(@PathVariable Long id){
+    public ResponseEntity<Void> activeUser(@PathVariable Long id) {
         userService.activeUser(id);
         return new ResponseEntity<>(HttpStatus.OK);
     }
@@ -48,22 +50,39 @@ public class UserRestAPIs {
     @GetMapping("/admin/user-list")
     public ResponseEntity<List<User>> getAllUserPagination(
             @RequestParam(defaultValue = "0") int page,
-            @RequestParam(defaultValue = "8") int size
+            @RequestParam(defaultValue = "9") int size
     ) {
         Pageable pageable = PageRequest.of(page, size);
-        Page<User> userList = userService.findAllUserPagination(pageable);
-        return new ResponseEntity(userList, new HttpHeaders(), HttpStatus.OK);
+        Set<Role> role = new HashSet<>();
+        role.add(new Role(1L, RoleName.ROLE_USER));
+        Page<User> userList = userService.findAllUserPagination(pageable, role);
+        List<User> userArrayList = userList.getContent();
+        List<User> finalList = new ArrayList<>();
+        for (int i = 0; i < userArrayList.size(); i++) {
+            Set<Role> rolelist = userArrayList.get(i).getRoles();
+            for (Iterator<Role> it = rolelist.iterator(); it.hasNext(); ) {
+                Role f = it.next();
+                if (f.getId() == 1) {
+                    finalList.add(userArrayList.get(i));
+                }
+            }
+        }
+
+        List<User> totalUserList = (List<User>) userService.findAll();
+
+        Page<User> list = new PageImpl<>(finalList, pageable, totalUserList.size());
+        return new ResponseEntity(list, HttpStatus.OK);
     }
 
     @GetMapping("/admin/user/{id}")
-    public ResponseEntity<User> getUserById (@PathVariable Long id){
+    public ResponseEntity<User> getUserById(@PathVariable Long id) {
         Optional<User> userOptional = userService.findById(id);
         User user = userOptional.get();
         return new ResponseEntity<>(user, HttpStatus.OK);
     }
 
     @PutMapping("/admin/edit/{id}")
-    public ResponseEntity<User> editUser (@PathVariable Long id, @RequestBody User user){
+    public ResponseEntity<User> editUser(@PathVariable Long id, @RequestBody User user) {
         user.setId(id);
         this.userService.save(user);
         return new ResponseEntity<>(HttpStatus.OK);
