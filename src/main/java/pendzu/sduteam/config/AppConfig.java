@@ -28,7 +28,6 @@ public class AppConfig implements WebMvcConfigurer, ApplicationContextAware {
 
     private ApplicationContext applicationContext;
 
-
     @Autowired
     Environment env;
 
