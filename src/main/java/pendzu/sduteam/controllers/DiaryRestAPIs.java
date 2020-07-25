@@ -1,6 +1,8 @@
 package pendzu.sduteam.controllers;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.PropertySource;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -12,14 +14,20 @@ import pendzu.sduteam.models.Diary;
 import pendzu.sduteam.services.IDiaryService;
 
 import javax.validation.Valid;
+import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Optional;
 
 @RequestMapping("/api/sdu")
 @RestController
 @CrossOrigin(origins = "*")
+@PropertySource({"classpath:status.properties"})
 public class DiaryRestAPIs {
+
+  @Value("${entity.exist}")
+  private int activeDiaryStatus;
 
     @Autowired
     private IDiaryService diaryService;
@@ -48,9 +56,9 @@ public class DiaryRestAPIs {
         if (!diary.isPresent()) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
-
         return new ResponseEntity<>(diary, HttpStatus.OK);
     }
+
 
     @PostMapping("/diary")
     public ResponseEntity<?> createDiary(@Valid @RequestBody Diary diary) {
@@ -87,13 +95,24 @@ public class DiaryRestAPIs {
     return new ResponseEntity<>(diary1, HttpStatus.OK);
   }
 
-  @GetMapping(value = "diary/user/{idUser}")
-  public ResponseEntity<List<Diary>> listDiaryByUser(
+
+  @GetMapping
+  public ResponseEntity<List<Diary>> getAllDiary(
+    @RequestParam(defaultValue = "0") int page,
+    @RequestParam(defaultValue = "5") int size
+  ) {
+    Pageable pageable = PageRequest.of(page, size);
+    Page<Diary> list = diaryService.findAll(pageable);
+    return new ResponseEntity(list, new HttpHeaders(), HttpStatus.OK);
+  }
+
+  @GetMapping(value = "/diary/user/{idUser}")
+  public ResponseEntity<List<Diary>> listDiaryByUserAndStatus(
     @PathVariable("idUser") long idUser,
     @RequestParam(defaultValue = "0") int page,
-    @RequestParam(defaultValue = "2") int size) {
+    @RequestParam(defaultValue = "5") int size) {
     Pageable pageable = PageRequest.of(page, size);
-    Page<Diary> listByUser = diaryService.getDiariesByUserId(pageable,idUser);
+    Page<Diary> listByUser = diaryService.findAllByUserIdAndStatus(pageable,idUser,activeDiaryStatus);
     if (listByUser.isEmpty()) {
       return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }

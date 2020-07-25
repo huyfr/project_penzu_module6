@@ -9,7 +9,7 @@ public interface IDiaryService extends GenericService<Diary> {
 
     Page<Diary> findAll(Pageable pageable);
 
-    Page<Diary> getDiariesByUserId(Pageable pageable, Long idUser);
-
+    Page<Diary> findAllByUserIdAndStatus(Pageable pageable,Long id,int status);
+ 
     void changeStatus(Long id);
 }
