@@ -67,7 +67,8 @@ public class AuthRestAPIs {
                 userDetails.getName(),
                 userDetails.getEmail(),
                 userDetails.getAvatar(),
-                userDetails.getAuthorities()
+                userDetails.getAuthorities(),
+                userDetails.getStatus()
         ));
     }
 
