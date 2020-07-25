@@ -48,8 +48,8 @@ public class DiaryServiceImpl implements IDiaryService {
     }
 
   @Override
-  public Page<Diary> getDiariesByUserId(Pageable pageable, Long idUser) {
-    return diaryRepository.getDiariesByUserId(pageable,idUser);
+  public Page<Diary> findAllByUserIdAndStatus(Pageable pageable, Long id, int status) {
+    return diaryRepository.findAllByUserIdAndStatus(pageable, id, status);
   }
 
   @Override
@@ -65,5 +65,30 @@ public class DiaryServiceImpl implements IDiaryService {
             diary.setStatus(deleteStatus);
             diaryRepository.save(diary);
         }
+    }
+
+    @Override
+    public Iterable<Diary> findDiariesByUserId(Long user_id) {
+        return diaryRepository.findDiariesByUserId(user_id);
+    }
+
+    @Override
+    public Iterable<Diary> findDiariesByTagId(Long tag_id) {
+        return diaryRepository.findDiariesByTagId(tag_id);
+    }
+
+    @Override
+    public Iterable<Diary> findDiariesByTitleContaining(String title) {
+        return diaryRepository.findDiariesByTitleContaining(title);
+    }
+
+    @Override
+    public Page<Diary> findAllByOrderByCreatedateAsc(Pageable pageable) {
+        return diaryRepository.findAllByOrderByCreatedateAsc(pageable);
+    }
+
+    @Override
+    public Page<Diary> findAllByOrderByCreatedateDesc(Pageable pageable) {
+        return diaryRepository.findAllByOrderByCreatedateDesc(pageable);
     }
 }

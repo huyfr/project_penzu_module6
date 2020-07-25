@@ -86,7 +86,7 @@ public abstract class FirebaseStorageService<T> {
             String blobName = blob.getName();
 
             if (object instanceof Diary) {
-                ((Diary) object).setBlobstring(blobName);
+                ((Diary) object).setBlobString(blobName);
             }
 
             if (object instanceof Album) {
@@ -112,7 +112,7 @@ public abstract class FirebaseStorageService<T> {
             StorageClient storageClient = getFirebaseStorage();
             String blobString = "";
             if (object instanceof Diary) {
-                blobString = ((Diary) object).getBlobstring();
+                blobString = ((Diary) object).getBlobString();
             }
 
             if (object instanceof Album) {

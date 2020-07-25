@@ -1,15 +1,19 @@
 package pendzu.sduteam.controllers;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.PropertySource;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import pendzu.sduteam.models.Diary;
 import pendzu.sduteam.services.IDiaryService;
+import pendzu.sduteam.services.impl.DiaryFirebaseServiceExtends;
 
 import javax.validation.Valid;
 import java.time.LocalDateTime;
@@ -19,17 +23,17 @@ import java.util.Optional;
 @RequestMapping("/api/sdu")
 @RestController
 @CrossOrigin(origins = "*")
+@PropertySource({"classpath:status.properties"})
 public class DiaryRestAPIs {
+
+    @Value("${entity.exist}")
+    private int activeDiaryStatus;
 
     @Autowired
     private IDiaryService diaryService;
 
-    @GetMapping("/diaries")
-    public ResponseEntity<Iterable<Diary>> getAllDiaryTitle(Diary diary){
-        return ResponseEntity.ok(this.diaryService.findAll());
-    }
-
-    /*-Tuan*/
+    @Autowired
+    private DiaryFirebaseServiceExtends diaryFirebaseServiceExtends;
 
     @GetMapping("/diary")
     public ResponseEntity<?> getListDiary() {
@@ -37,7 +41,6 @@ public class DiaryRestAPIs {
         if (diaries.isEmpty()) {
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         }
-
         return new ResponseEntity<>(diaries, HttpStatus.OK);
     }
 
@@ -48,7 +51,6 @@ public class DiaryRestAPIs {
         if (!diary.isPresent()) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
-
         return new ResponseEntity<>(diary, HttpStatus.OK);
     }
 
@@ -84,21 +86,21 @@ public class DiaryRestAPIs {
 
         diaryService.save(diary1.get());
 
-    return new ResponseEntity<>(diary1, HttpStatus.OK);
-  }
-
-  @GetMapping(value = "diary/user/{idUser}")
-  public ResponseEntity<List<Diary>> listDiaryByUser(
-    @PathVariable("idUser") long idUser,
-    @RequestParam(defaultValue = "0") int page,
-    @RequestParam(defaultValue = "2") int size) {
-    Pageable pageable = PageRequest.of(page, size);
-    Page<Diary> listByUser = diaryService.getDiariesByUserId(pageable,idUser);
-    if (listByUser.isEmpty()) {
-      return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        return new ResponseEntity<>(diary1, HttpStatus.OK);
     }
-    return new ResponseEntity(listByUser, HttpStatus.OK);
-  }
+
+    @GetMapping(value = "/diary/user/{idUser}")
+    public ResponseEntity<List<Diary>> listDiaryByUser(
+            @PathVariable("idUser") long idUser,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "5") int size) {
+        Pageable pageable = PageRequest.of(page, size);
+        Page<Diary> listByUser = diaryService.findAllByUserIdAndStatus(pageable, idUser, activeDiaryStatus);
+        if (listByUser.isEmpty()) {
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        }
+        return new ResponseEntity(listByUser, HttpStatus.OK);
+    }
 
     @GetMapping
     public ResponseEntity<List<Diary>> getAllDiary(
@@ -106,14 +108,35 @@ public class DiaryRestAPIs {
             @RequestParam(defaultValue = "4") int size
     ) {
         Pageable pageable = PageRequest.of(page, size);
-        Page<Diary> list =  diaryService.findAll(pageable);
+        Page<Diary> list = diaryService.findAll(pageable);
 
         return new ResponseEntity(list, new HttpHeaders(), HttpStatus.OK);
     }
 
-    @DeleteMapping("/dairy/delete/{id}")
-    public ResponseEntity<Void> remove(@PathVariable Long id){
+    @DeleteMapping("/diary/{id}")
+    public ResponseEntity<Void> remove(@PathVariable Long id) {
         this.diaryService.changeStatus(id);
         return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    @GetMapping("/diary/pagination/ASC")
+    public ResponseEntity<?> getListDiaryAndPaginationASC(@PageableDefault(value = 2) Pageable pageable) {
+        Page<Diary> diaries = diaryService.findAllByOrderByCreatedateAsc(pageable);
+
+        if (diaries.isEmpty()) {
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        }
+
+        return new ResponseEntity<>(diaries, HttpStatus.OK);
+    }
+
+    @GetMapping("/diary/pagination/DESC")
+    public ResponseEntity<?> getListDiaryAndPaginationDESC(@PageableDefault(value = 2) Pageable pageable) {
+        Page<Diary> diaries = diaryService.findAllByOrderByCreatedateDesc(pageable);
+
+        if (diaries.isEmpty()) {
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        }
+        return new ResponseEntity<>(diaries, HttpStatus.OK);
     }
 }

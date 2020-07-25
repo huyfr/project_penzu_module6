@@ -1,11 +1,7 @@
 package pendzu.sduteam.models;
 
-import org.apache.tomcat.jni.Local;
-
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
 import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.Set;
@@ -25,6 +21,9 @@ public class Diary {
     @NotBlank
     @Lob
     private String description;
+
+    @Lob
+    private String urlFile;
 
     @NotBlank
     @Lob
@@ -53,7 +52,7 @@ public class Diary {
     private User user;
 
 
-    private String blobstring;
+    private String blobString;
 
     @ManyToOne(targetEntity = Reaction.class)
     @JoinColumn(name = "reactions_id")
@@ -71,9 +70,25 @@ public class Diary {
         this.status = status;
     }
 
-    public Diary(@NotBlank @Size(min = 3, max = 64) String title, @NotBlank @Size(min = 3, max = 64) String description, @NotBlank String content, @NotBlank Tag tag, LocalDateTime createdate, LocalDateTime updatedate, Set<Attachment> attachment, int status, User user, String blobstring, Reaction reaction) {
+//    public Diary(@NotBlank @Size(min = 3, max = 64) String title, @NotBlank @Size(min = 3, max = 64) String description, @NotBlank String content, @NotBlank Tag tag, LocalDateTime createdate, LocalDateTime updatedate, Set<Attachment> attachment, int status, User user, String blobString, Reaction reaction) {
+//        this.title = title;
+//        this.description = description;
+//        this.content = content;
+//        this.tag = tag;
+//        this.createdate = createdate;
+//        this.updatedate = updatedate;
+//        this.attachment = attachment;
+//        this.status = status;
+//        this.user = user;
+//        this.blobString = blobString;
+//        this.reaction = reaction;
+//    }
+
+    public Diary(Long id, @NotBlank String title, @NotBlank String description, String urlFile, @NotBlank String content, Tag tag, LocalDateTime createdate, LocalDateTime updatedate, Set<Attachment> attachment, int status, User user, Reaction reaction) {
+        this.id = id;
         this.title = title;
         this.description = description;
+        this.urlFile = urlFile;
         this.content = content;
         this.tag = tag;
         this.createdate = createdate;
@@ -81,20 +96,27 @@ public class Diary {
         this.attachment = attachment;
         this.status = status;
         this.user = user;
-        this.blobstring = blobstring;
         this.reaction = reaction;
     }
 
-    public Diary(String title, String description, String content,
-                 Tag tag, Set<Attachment> attachment, User user) {
-        this.title = title;
-        this.description = description;
-        this.content = content;
+    public Diary(Long id, Tag tag, User user, String blobString, Reaction reaction) {
+        this.id = id;
         this.tag = tag;
-        this.attachment = attachment;
         this.user = user;
-        this.blobstring = blobstring;
+        this.blobString = blobString;
+        this.reaction = reaction;
     }
+
+    //    public Diary(String title, String description, String content,
+//                 Tag tag, Set<Attachment> attachment, User user) {
+//        this.title = title;
+//        this.description = description;
+//        this.content = content;
+//        this.tag = tag;
+//        this.attachment = attachment;
+//        this.user = user;
+//        this.blobstring = blobstring;
+//    }
 
     public Long getId() {
         return id;
@@ -168,12 +190,20 @@ public class Diary {
         this.user = user;
     }
 
-    public String getBlobstring() {
-        return blobstring;
+    public String getUrlFile() {
+        return urlFile;
     }
 
-    public void setBlobstring(String blobstring) {
-        this.blobstring = blobstring;
+    public void setUrlFile(String urlFile) {
+        this.urlFile = urlFile;
+    }
+
+    public String getBlobString() {
+        return blobString;
+    }
+
+    public void setBlobString(String blobString) {
+        this.blobString = blobString;
     }
 
     public Reaction getReaction() {
