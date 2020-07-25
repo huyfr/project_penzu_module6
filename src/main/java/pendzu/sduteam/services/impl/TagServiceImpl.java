@@ -12,7 +12,7 @@ import java.util.Optional;
 
 @Service
 @PropertySource({"classpath:status.properties"})
-public class TagServiceIpml implements ITagService {
+public class TagServiceImpl implements ITagService {
 
   @Value("${entity.deleted}")
   private int deleteStatus;

@@ -9,12 +9,16 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import pendzu.sduteam.message.request.SearchUserByName;
+import pendzu.sduteam.models.Diary;
 import pendzu.sduteam.models.Role;
 import pendzu.sduteam.models.RoleName;
 import pendzu.sduteam.models.User;
+import pendzu.sduteam.services.IDiaryService;
 import pendzu.sduteam.services.impl.UserServiceImpl;
 
-import java.util.*;
+import java.util.List;
+import java.util.Optional;
 
 @RequestMapping("/api/sdu")
 @RestController
@@ -23,6 +27,9 @@ public class UserRestAPIs {
 
     @Autowired
     private UserServiceImpl userService;
+
+    @Autowired
+    private IDiaryService diaryService;
 
     @GetMapping("/admin/user")
     public ResponseEntity<List<User>> showListUser() {
@@ -96,4 +103,45 @@ public class UserRestAPIs {
         }
         return new ResponseEntity<>(user, HttpStatus.OK);
     }
+
+    @GetMapping("/user")
+    public ResponseEntity<?> getListAllUser(){
+        List<User> users = (List<User>) userService.findAll();
+
+        if(users.isEmpty()) {
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        }
+        return new ResponseEntity<>(users,HttpStatus.OK);
+    }
+
+    @GetMapping("/user/{id}/diary")
+    public ResponseEntity<?> getAllDiaryByUser(@PathVariable Long id) {
+        List<Diary> diaries = (List<Diary>) diaryService.findDiariesByUserId(id);
+
+        if(diaries.isEmpty()) {
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        }
+
+        return new ResponseEntity<>(diaries,HttpStatus.OK);
+    }
+
+    @PostMapping("/user/search-by-name")
+    public ResponseEntity<?> getListUserByName(@RequestBody SearchUserByName userForm) {
+        if(userForm.getName().equals("") || userForm.getName() == null) {
+            List<User> users = (List<User>) userService.findAll();
+
+            if(users.isEmpty()) {
+                return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+            } else {
+                return new ResponseEntity<>(users,HttpStatus.OK);
+            }
+        }
+        List<User> users = (List<User>) userService.findUsersByNameContaining(userForm.getName());
+        if (users.isEmpty()) {
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        } else {
+            return new ResponseEntity<>(users, HttpStatus.OK);
+        }
+    }
+
 }
