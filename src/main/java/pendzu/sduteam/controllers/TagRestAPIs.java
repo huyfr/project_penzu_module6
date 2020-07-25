@@ -39,12 +39,6 @@ public class TagRestAPIs {
     return new ResponseEntity<>(tag, HttpStatus.OK);
   }
 
-//  @PostMapping("/create")
-//  public ResponseEntity<Tag> createCustomer(@Valid @RequestBody Tag tag) {
-//    tagService.save(tag);
-//    return new ResponseEntity<>(HttpStatus.OK);
-//  }
-
   @PutMapping("/tag/{id}")
   public ResponseEntity<?> editTag(@PathVariable Long id, @RequestBody Tag tag) {
     Optional<Tag> tagOptional = tagService.findById(id);
@@ -67,8 +61,6 @@ public class TagRestAPIs {
   @PostMapping("/tag")
   public ResponseEntity<?> createTag(@Valid @RequestBody Tag tag) {
     tagService.save(tag);
-
     return new ResponseEntity<>(tag,HttpStatus.CREATED);
   }
-
 }
