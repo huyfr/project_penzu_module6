@@ -48,7 +48,7 @@ public class ForgotPasswordRestAPIs {
         return new ResponseEntity<>(passwordForgotForm, HttpStatus.OK);
     }
 
-    @RequestMapping(value = "new-password", method = {RequestMethod.GET, RequestMethod.POST})
+    @RequestMapping(value = "user/new-password", method = {RequestMethod.GET, RequestMethod.POST})
     public ResponseEntity<User> updatePassword(@RequestParam("token") String token, @RequestBody User user) {
         VerificationToken verificationToken = verificationTokenService.findByToken(token);
         boolean isExpired = verificationToken.isExpired();
