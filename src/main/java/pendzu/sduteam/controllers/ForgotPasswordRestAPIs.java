@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 import pendzu.sduteam.models.PasswordForgotForm;
 import pendzu.sduteam.models.User;
@@ -16,6 +17,9 @@ import pendzu.sduteam.services.impl.UserServiceImpl;
 @CrossOrigin("*")
 @RequestMapping("api/sdu/")
 public class ForgotPasswordRestAPIs {
+    @Autowired
+    private PasswordEncoder passwordEncoder;
+
     @Autowired
     private Environment env;
 
@@ -44,4 +48,23 @@ public class ForgotPasswordRestAPIs {
         return new ResponseEntity<>(passwordForgotForm, HttpStatus.OK);
     }
 
+    @RequestMapping(value = "new-password", method = {RequestMethod.GET, RequestMethod.POST})
+    public ResponseEntity<User> updatePassword(@RequestParam("token") String token, @RequestBody User user) {
+        VerificationToken verificationToken = verificationTokenService.findByToken(token);
+        boolean isExpired = verificationToken.isExpired();
+        if (token == null) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+        if (isExpired) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+        User currentUser = userService.findByEmail(verificationToken.getUser().getEmail());
+        if (currentUser == null) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+        String newPassword = passwordEncoder.encode(user.getPassword());
+        currentUser.setPassword(newPassword);
+        userService.save(currentUser);
+        return new ResponseEntity<>(currentUser, HttpStatus.OK);
+    }
 }
