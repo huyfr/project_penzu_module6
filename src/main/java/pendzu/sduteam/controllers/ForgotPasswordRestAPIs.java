@@ -43,8 +43,10 @@ public class ForgotPasswordRestAPIs {
         verificationTokenService.save(token);
         emailService.sendEmail(
                 passwordForgotForm.getEmail(),
-                "Đổi mật khẩu",
-                "Nhấn vào đường dẫn sau để đổi mật khẩu :" + "http://localhost:4200/recover-password" + "?token=" + token.getToken());
+                "Penzu ! Reset Password",
+                "You are in process of resetting password." +
+                        "Click below Url to set new password :" +
+                        "http://localhost:4200/recover-password" + "?token=" + token.getToken());
         return new ResponseEntity<>(passwordForgotForm, HttpStatus.OK);
     }
 
