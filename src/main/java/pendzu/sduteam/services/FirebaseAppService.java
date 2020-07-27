@@ -9,6 +9,8 @@ import java.io.IOException;
 
 public class FirebaseAppService {
 
+    private static final String RESOURCES = "src/main/resources/sduteam.json";
+
     private static FirebaseApp firebaseApp;
 
     private FirebaseAppService() {}
@@ -17,7 +19,8 @@ public class FirebaseAppService {
 
         if (firebaseApp == null) {
             FileInputStream serviceAccount =
-                    new FileInputStream("C:\\Users\\Admin\\Desktop\\Project Sdu Team\\sduteam.json");
+//                    new FileInputStream("C:\\Users\\Admin\\Desktop\\Project Sdu Team\\sduteam.json");
+                    new FileInputStream(RESOURCES);
 
             GoogleCredentials credentials = GoogleCredentials.fromStream(serviceAccount);
             FirebaseOptions firebaseOptions = FirebaseOptions.builder()
