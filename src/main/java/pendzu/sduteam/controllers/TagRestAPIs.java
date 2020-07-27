@@ -21,7 +21,7 @@ public class TagRestAPIs {
   @Autowired
   TagServiceIpml tagService;
 
-  @GetMapping("/tags")
+  @GetMapping("/tag")
   public ResponseEntity<?> getListTag() {
     List<Tag> tags = (List<Tag>) tagService.findAll();
     if(tags.isEmpty()) {
@@ -39,28 +39,28 @@ public class TagRestAPIs {
     return new ResponseEntity<>(tag, HttpStatus.OK);
   }
 
-  @PostMapping("/create")
-  public ResponseEntity<Tag> createCustomer(@Valid @RequestBody Tag tag) {
-    tagService.save(tag);
-    return new ResponseEntity<>(HttpStatus.OK);
-  }
-
-  @PutMapping("/edit/{id}")
+  @PutMapping("/tag/{id}")
   public ResponseEntity<?> editTag(@PathVariable Long id, @RequestBody Tag tag) {
     Optional<Tag> tagOptional = tagService.findById(id);
-    if (tagOptional == null) {
+    if (!tagOptional.isPresent()) {
       return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
     tagOptional.get().setStatus(tag.getStatus());
-    tagOptional.get().setTagname(tag.getTagname());
+    tagOptional.get().setName(tag.getName());
     tagService.save(tagOptional.get());
     return new ResponseEntity<>(tagOptional , HttpStatus.OK);
   }
 
-  @DeleteMapping("/delete/{id}")
+  @DeleteMapping("/tag/{id}")
   public ResponseEntity<Void> remove(@PathVariable Long id){
     this.tagService.delete(id);
     return new ResponseEntity<>(HttpStatus.OK);
   }
 
+  /*Tuan Code*/
+  @PostMapping("/tag")
+  public ResponseEntity<?> createTag(@Valid @RequestBody Tag tag) {
+    tagService.save(tag);
+    return new ResponseEntity<>(tag,HttpStatus.CREATED);
+  }
 }

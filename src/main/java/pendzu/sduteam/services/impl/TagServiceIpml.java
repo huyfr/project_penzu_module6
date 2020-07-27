@@ -5,7 +5,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.stereotype.Service;
 import pendzu.sduteam.models.Tag;
-import pendzu.sduteam.repositories.TagRepository;
+import pendzu.sduteam.repositories.ITagRepository;
 import pendzu.sduteam.services.ITagService;
 
 import java.util.Optional;
@@ -18,28 +18,33 @@ public class TagServiceIpml implements ITagService {
   private int deleteStatus;
 
   @Autowired
-  TagRepository tagRepository;
+  ITagRepository repository;
 
   @Override
   public Optional<Tag> findById(Long id) {
-    return tagRepository.findById(id);
+    return repository.findById(id);
   }
 
   @Override
   public Iterable<Tag> findAll() {
-    return tagRepository.findAll();
+    return repository.findAll();
   }
 
   @Override
   public Tag save(Tag model) {
-    return tagRepository.save(model);
+    return repository.save(model);
   }
 
   @Override
   public void delete(Long id) {
-    Optional<Tag> tagOptional = tagRepository.findById(id);
+    Optional<Tag> tagOptional = repository.findById(id);
     Tag tag = tagOptional.get();
     tag.setStatus(deleteStatus);
-    tagRepository.save(tag);
+    repository.save(tag);
+  }
+
+  @Override
+  public Iterable<Tag> findTagsByNameContaining(String tag_name) {
+    return repository.findTagsByNameContaining(tag_name);
   }
 }
