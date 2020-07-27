@@ -24,6 +24,8 @@ public class UserPrinciple implements UserDetails {
 
     private String avatar;
 
+    private int status;
+
     @JsonIgnore
     private String password;
 
@@ -31,7 +33,7 @@ public class UserPrinciple implements UserDetails {
 
     public UserPrinciple(Long id, String name,
                          String username, String email, String password,String avatar,
-                         Collection<? extends GrantedAuthority> roles) {
+                         Collection<? extends GrantedAuthority> roles, int status) {
         this.id = id;
         this.name = name;
         this.username = username;
@@ -39,6 +41,7 @@ public class UserPrinciple implements UserDetails {
         this.password = password;
         this.avatar = avatar;
         this.roles = roles;
+        this.status = status;
     }
 
     public static UserPrinciple build(User user) {
@@ -53,7 +56,8 @@ public class UserPrinciple implements UserDetails {
                 user.getEmail(),
                 user.getPassword(),
                 user.getAvatar(),
-                authorities
+                authorities,
+                user.getStatus()
         );
     }
 
@@ -107,6 +111,14 @@ public class UserPrinciple implements UserDetails {
 
     public Long getId() {
         return id;
+    }
+
+    public int getStatus() {
+        return status;
+    }
+
+    public void setStatus(int status) {
+        this.status = status;
     }
 
     @Override
