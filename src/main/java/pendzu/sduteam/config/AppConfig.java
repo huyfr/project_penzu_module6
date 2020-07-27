@@ -46,7 +46,7 @@ public class AppConfig implements WebMvcConfigurer, ApplicationContextAware {
 
         registry
                 .addResourceHandler("/uploads/**")
-                .addResourceLocations("file:C:/Users/Admin/Desktop/Project Sdu Team/image");
+                .addResourceLocations("file:C:/Users/Admin/Desktop/Project Sdu Team/sduteam.json");
     }
 
     //Config FileUpload

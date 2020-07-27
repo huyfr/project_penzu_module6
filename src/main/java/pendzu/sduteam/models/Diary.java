@@ -159,9 +159,10 @@ public class Diary {
         this.tag = tag;
     }
 
-    //    public LocalDateTime getCreatedate() {
+//    public LocalDateTime getCreatedate() {
 //        return createdate;
 //    }
+
     public String getCreatedate() {
         DateTimeFormatter format = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss");
         String now = createdate.format(format);
@@ -172,13 +173,8 @@ public class Diary {
         this.createdate = createdate;
     }
 
-    //    public LocalDateTime getUpdatedate() {
-//        return updatedate;
-//    }
-    public String getUpdatedate() {
-        DateTimeFormatter format = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss");
-        String now = updatedate.format(format);
-        return now;
+    public LocalDateTime getUpdatedate() {
+        return updatedate;
     }
 
     public void setUpdatedate(LocalDateTime updatedate) {

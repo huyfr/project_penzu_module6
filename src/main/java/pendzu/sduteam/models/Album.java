@@ -137,13 +137,8 @@ public class Album {
         this.createdate = createdate;
     }
 
-    //    public LocalDateTime getUpdatedate() {
-//        return updatedate;
-//    }
-    public String getUpdatedate() {
-        DateTimeFormatter format = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss");
-        String now = updatedate.format(format);
-        return now;
+    public LocalDateTime getUpdatedate() {
+        return updatedate;
     }
 
     public void setUpdatedate(LocalDateTime updatedate) {
