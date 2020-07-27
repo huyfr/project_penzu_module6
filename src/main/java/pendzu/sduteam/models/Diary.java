@@ -51,7 +51,6 @@ public class Diary {
     @JoinColumn(name = "users_id")
     private User user;
 
-
     private String blobString;
 
     @ManyToOne(targetEntity = Reaction.class)
@@ -60,7 +59,6 @@ public class Diary {
 
     public Diary() {
     }
-
 
     public int getStatus() {
         return status;
