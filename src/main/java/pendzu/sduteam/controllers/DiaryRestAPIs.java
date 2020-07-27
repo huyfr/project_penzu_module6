@@ -62,6 +62,7 @@ public class DiaryRestAPIs {
 
         LocalDateTime now = LocalDateTime.now();
         diary.setCreatedate(now);
+        diary.setUpdatedate(now);
         String tempContent = diary.getContent();
         String contentReplace = tempContent.replace("<img", "<img class=\"img-fluid\"");
         diary.setContent(contentReplace);
