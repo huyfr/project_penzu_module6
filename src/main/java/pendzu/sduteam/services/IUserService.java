@@ -24,4 +24,6 @@ public interface IUserService extends GenericService<User> {
     void activeUser(Long id);
 
     Page<User> findAllUserPagination(Pageable pageable);
+
+    User findByEmail (String email);
 }
