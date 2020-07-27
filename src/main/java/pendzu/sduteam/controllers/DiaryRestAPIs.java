@@ -32,6 +32,9 @@ public class DiaryRestAPIs {
     @Value("${entity.exist}")
     private int activeDiaryStatus;
 
+    @Value("${entity.greater.than.zero}")
+    private int allPostAvailable;
+
     @Autowired
     private IDiaryService diaryService;
 
@@ -94,7 +97,7 @@ public class DiaryRestAPIs {
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "5") int size) {
         Pageable pageable = PageRequest.of(page, size);
-        Page<Diary> listByUser = diaryService.findAllByUserIdAndStatus(pageable, idUser, activeDiaryStatus);
+        Page<Diary> listByUser = diaryService.findDiariesByUserIdAndStatusAfter(pageable, idUser, allPostAvailable);
         if (listByUser.isEmpty()) {
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         }
