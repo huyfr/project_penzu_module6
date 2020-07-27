@@ -3,6 +3,7 @@ package pendzu.sduteam.models;
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -29,12 +30,12 @@ public class Diary {
     @Lob
     private String content;
 
-//    @NotBlank
+    //    @NotBlank
     @ManyToOne(targetEntity = Tag.class)
     @JoinColumn(name = "tag_id")
     private Tag tag;
 
-    private LocalDateTime createdate = LocalDateTime.now();
+    private LocalDateTime createdate;
 
     private LocalDateTime updatedate;
 
@@ -158,16 +159,26 @@ public class Diary {
         this.tag = tag;
     }
 
-    public LocalDateTime getCreatedate() {
-        return createdate;
+    //    public LocalDateTime getCreatedate() {
+//        return createdate;
+//    }
+    public String getCreatedate() {
+        DateTimeFormatter format = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss");
+        String now = createdate.format(format);
+        return now;
     }
 
     public void setCreatedate(LocalDateTime createdate) {
         this.createdate = createdate;
     }
 
-    public LocalDateTime getUpdatedate() {
-        return updatedate;
+    //    public LocalDateTime getUpdatedate() {
+//        return updatedate;
+//    }
+    public String getUpdatedate() {
+        DateTimeFormatter format = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss");
+        String now = updatedate.format(format);
+        return now;
     }
 
     public void setUpdatedate(LocalDateTime updatedate) {
