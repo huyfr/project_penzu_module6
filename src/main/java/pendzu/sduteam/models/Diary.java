@@ -45,7 +45,8 @@ public class Diary {
     private Set<Attachment> attachment = new HashSet<>();
 
 
-    private int status = 1;
+//    private int status = 1;
+    private int status;
 
     @ManyToOne(targetEntity = User.class)
     @JoinColumn(name = "users_id")
