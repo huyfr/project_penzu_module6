@@ -252,7 +252,7 @@ public class DiaryRestAPIs {
         String email = shareDiaryByEmailForm.getEmail();
 
         emailService.sendEmail(
-                shareDiaryByEmailForm.getEmail(),
+                email,
                 "Penzu ! Take a journals",
                 "Take a rest with this news, my friend!" +
                         "Click here :" +
