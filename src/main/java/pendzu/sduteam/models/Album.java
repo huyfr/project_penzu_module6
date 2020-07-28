@@ -1,5 +1,7 @@
 package pendzu.sduteam.models;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import java.time.LocalDateTime;
@@ -40,8 +42,10 @@ public class Album {
     @JoinColumn(name = "reactions_id")
     private Reaction reaction;
 
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime createdate;
 
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime updatedate;
 
     private int status = 1;
@@ -124,13 +128,8 @@ public class Album {
         this.reaction = reaction;
     }
 
-    //    public LocalDateTime getCreatedate() {
-//        return createdate;
-//    }
-    public String getCreatedate() {
-        DateTimeFormatter format = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss");
-        String now = createdate.format(format);
-        return now;
+    public LocalDateTime getCreatedate() {
+        return createdate;
     }
 
     public void setCreatedate(LocalDateTime createdate) {

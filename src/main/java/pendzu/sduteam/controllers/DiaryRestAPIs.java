@@ -63,9 +63,10 @@ public class DiaryRestAPIs {
     @PostMapping("/diary")
     public ResponseEntity<?> createDiary(@Valid @RequestBody Diary diary) {
 
-        LocalDateTime now = LocalDateTime.now();
-        diary.setCreatedate(now);
-        diary.setUpdatedate(now);
+        LocalDateTime localDateTime = LocalDateTime.now();
+
+        diary.setCreatedate(localDateTime);
+        diary.setUpdatedate(localDateTime);
         String tempContent = diary.getContent();
         String contentReplace = tempContent.replace("<img", "<img class=\"img-fluid\"");
         diary.setContent(contentReplace);
@@ -81,8 +82,9 @@ public class DiaryRestAPIs {
         if (!currentDiary.isPresent()) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         } else {
-            LocalDateTime now = LocalDateTime.now();
-            diary.setUpdatedate(now);
+            LocalDateTime localDateTime = LocalDateTime.now();
+
+            diary.setUpdatedate(localDateTime);
             String tempContent = diary.getContent();
             String contentReplace = tempContent.replace("<img", "<img class=\"img-fluid\"");
             diary.setContent(contentReplace);
