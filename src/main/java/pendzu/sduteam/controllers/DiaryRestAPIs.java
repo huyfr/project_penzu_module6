@@ -67,8 +67,9 @@ public class DiaryRestAPIs {
         diary.setCreatedate(now);
         diary.setUpdatedate(now);
         String tempContent = diary.getContent();
-        String contentReplace = tempContent.replace("<img", "<img class=\"img-fluid\"");
-        diary.setContent(contentReplace);
+        String contentReplaceImage = tempContent.replace("<img", "<img class=\"img-fluid\"");
+        String contentReplaceFinal = contentReplaceImage.replace("<iframe", "<iframe class=\"embed-responsive embed-responsive-16by9\"");
+        diary.setContent(contentReplaceFinal);
         diaryService.save(diary);
 
         return new ResponseEntity<>(diary, HttpStatus.CREATED);
@@ -84,8 +85,9 @@ public class DiaryRestAPIs {
             LocalDateTime now = LocalDateTime.now();
             diary.setUpdatedate(now);
             String tempContent = diary.getContent();
-            String contentReplace = tempContent.replace("<img", "<img class=\"img-fluid\"");
-            diary.setContent(contentReplace);
+            String contentReplaceImage = tempContent.replace("<img", "<img class=\"img-fluid\"");
+            String contentReplaceFinal = contentReplaceImage.replace("<iframe", "<iframe class=\"embed-responsive embed-responsive-16by9\"");
+            diary.setContent(contentReplaceFinal);
             diaryService.save(diary);
             return new ResponseEntity<>(currentDiary, HttpStatus.OK);
         }
