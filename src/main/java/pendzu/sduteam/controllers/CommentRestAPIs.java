@@ -41,6 +41,8 @@ public class CommentRestAPIs {
 
     @PostMapping("/comment/create")
     public ResponseEntity<?> createComment(@RequestBody Comment comment){
+        LocalDateTime now = LocalDateTime.now();
+        comment.setCreatedate(now);
         commentService.createComment(comment);
         return new ResponseEntity<>(comment, HttpStatus.OK);
     }

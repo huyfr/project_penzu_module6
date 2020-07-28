@@ -1,5 +1,7 @@
 package pendzu.sduteam.models;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import java.time.LocalDateTime;
@@ -33,8 +35,10 @@ public class Diary {
     @JoinColumn(name = "tag_id")
     private Tag tag;
 
-    private LocalDateTime createdate = LocalDateTime.now();
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
+    private LocalDateTime createdate;
 
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime updatedate;
 
     @ManyToMany(fetch = FetchType.LAZY)

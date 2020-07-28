@@ -1,5 +1,7 @@
 package pendzu.sduteam.models;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import java.time.LocalDateTime;
@@ -27,6 +29,7 @@ public class Comment {
     @JoinColumn(name = "diary_id")
     private Diary diary;
 
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
     LocalDateTime createdate = LocalDateTime.now();
 
     public Comment(@NotBlank String content, int status, @NotBlank User user, @NotBlank Diary diary) {
