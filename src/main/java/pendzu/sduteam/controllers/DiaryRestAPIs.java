@@ -16,6 +16,7 @@ import pendzu.sduteam.message.request.SearchDiaryByTagAndTitle;
 import pendzu.sduteam.message.request.SearchDiaryByTitle;
 import pendzu.sduteam.message.request.SearchDiaryByTitleAndUserId;
 import pendzu.sduteam.models.Diary;
+import pendzu.sduteam.models.ShareDiaryByEmailForm;
 import pendzu.sduteam.services.IDiaryService;
 import pendzu.sduteam.services.impl.DiaryFirebaseServiceExtends;
 import pendzu.sduteam.services.impl.EmailService;
