@@ -88,7 +88,6 @@ public class DiaryRestAPIs {
         diary1.get().setUser(diary.getUser());
         diary1.get().setAttachment(diary.getAttachment());
         diary1.get().setStatus(diary.getStatus());
-        diary1.get().setReaction(diary.getReaction());
 
         diaryService.save(diary1.get());
 

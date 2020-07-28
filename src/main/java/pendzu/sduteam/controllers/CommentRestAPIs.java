@@ -39,20 +39,6 @@ public class CommentRestAPIs {
         return new ResponseEntity<>(comments, HttpStatus.OK);
     }
 
-//    @GetMapping("/comment/{id}")
-//    public ResponseEntity<?> getAllCommentByDiaryId(@PathVariable Long id){
-//        commentContent = null;
-//        List<Comment> comments = (List<Comment>) commentService.getAllByDiaryId(id);
-//        if (comments.isEmpty()){
-//            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-//        }
-//        for (int i = 0; i < comments.size(); i++){
-//            String content = comments.get(i).getContent();
-//            commentContent.add(content);
-//        }
-//        return new ResponseEntity<>(commentContent, HttpStatus.OK);
-//    }
-
     @PostMapping("/comment/create")
     public ResponseEntity<?> createComment(@RequestBody Comment comment){
         commentService.createComment(comment);

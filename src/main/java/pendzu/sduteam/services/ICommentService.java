@@ -1,6 +1,5 @@
 package pendzu.sduteam.services;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import pendzu.sduteam.models.Comment;
 
 import java.util.List;
