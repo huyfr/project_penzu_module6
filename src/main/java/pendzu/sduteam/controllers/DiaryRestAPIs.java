@@ -1,5 +1,6 @@
 package pendzu.sduteam.controllers;
 
+import org.apache.commons.codec.digest.DigestUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.PropertySource;
@@ -226,5 +227,15 @@ public class DiaryRestAPIs {
         } else {
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
+    }
+
+    @GetMapping("/diary/get-share-link/{id}")
+    ResponseEntity<?> getShareLink(@PathVariable Long id){
+        String diaryUrl = "rdiary/detail/"+id;
+        Diary diary = diaryService.findById(id).get();
+        String idAfterGenerate = DigestUtils.md5Hex(diaryUrl);
+        diary.setGeneratedUrl(idAfterGenerate);
+        diaryService.save(diary);
+        return new ResponseEntity<>(diary,HttpStatus.OK);
     }
 }
