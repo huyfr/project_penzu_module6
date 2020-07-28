@@ -62,6 +62,8 @@ public class Diary {
     @JoinColumn(name = "reactions_id")
     private Reaction reaction;
 
+    private String generatedUrl;
+
     public Diary() {
     }
 
@@ -89,6 +91,7 @@ public class Diary {
         this.user = user;
         this.reaction = reaction;
     }
+
 
     public Diary(Long id, Tag tag, User user, String blobString, Reaction reaction) {
         this.id = id;
@@ -193,5 +196,13 @@ public class Diary {
 
     public void setReaction(Reaction reaction) {
         this.reaction = reaction;
+    }
+
+    public String getGeneratedUrl() {
+        return generatedUrl;
+    }
+
+    public void setGeneratedUrl(String generatedUrl) {
+        this.generatedUrl = generatedUrl;
     }
 }

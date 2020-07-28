@@ -9,7 +9,7 @@ public interface IDiaryService extends GenericService<Diary> {
 
     Page<Diary> findAll(Pageable pageable);
 
-    Page<Diary> findAllByUserIdAndStatus(Pageable pageable, Long id, int status);
+    Page<Diary> findAllByUserIdAndStatus(Pageable pageable,Long id,int status);
 
     void changeStatus(Long id);
 
@@ -28,4 +28,6 @@ public interface IDiaryService extends GenericService<Diary> {
     Iterable<Diary> findDiariesByTitleContainingAndUserId(String title, Long user_id);
 
     Iterable<Diary> findDiariesByTagIdAndTitleContaining(Long tag_id, String title);
+
+    Iterable<Diary> findByUrl(String url);
 }

@@ -1,5 +1,6 @@
 package pendzu.sduteam.controllers;
 
+import org.apache.commons.codec.digest.DigestUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.PropertySource;
@@ -14,9 +15,10 @@ import org.springframework.web.bind.annotation.*;
 import pendzu.sduteam.message.request.SearchDiaryByTagAndTitle;
 import pendzu.sduteam.message.request.SearchDiaryByTitle;
 import pendzu.sduteam.message.request.SearchDiaryByTitleAndUserId;
-import pendzu.sduteam.models.Diary;
+import pendzu.sduteam.models.*;
 import pendzu.sduteam.services.IDiaryService;
 import pendzu.sduteam.services.impl.DiaryFirebaseServiceExtends;
+import pendzu.sduteam.services.impl.EmailService;
 
 import javax.validation.Valid;
 import java.time.LocalDateTime;
@@ -40,6 +42,9 @@ public class DiaryRestAPIs {
 
     @Autowired
     private DiaryFirebaseServiceExtends diaryFirebaseServiceExtends;
+
+    @Autowired
+    private EmailService emailService;
 
     @GetMapping("/diary")
     public ResponseEntity<?> getListDiary() {
@@ -226,5 +231,36 @@ public class DiaryRestAPIs {
         } else {
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
+    }
+
+    @GetMapping("/diary/get-share-link/{id}")
+    ResponseEntity<?> getShareLink(@PathVariable Long id){
+        String diaryUrl = "diary/detail/"+id;
+        Diary diary = diaryService.findById(id).get();
+        String idAfterGenerate = DigestUtils.md5Hex(diaryUrl);
+        diary.setGeneratedUrl(idAfterGenerate);
+        diaryService.save(diary);
+        return new ResponseEntity<>(diary,HttpStatus.OK);
+    }
+
+    @PostMapping("/diary/share-link-via-email/{id}")
+    public ResponseEntity<?> shareLinkByEmail(
+            @RequestBody ShareDiaryByEmailForm shareDiaryByEmailForm,
+            @PathVariable Long id) {
+
+        String diaryUrl = "diary/detail/"+id;
+        Diary diary = diaryService.findById(id).get();
+        String idAfterGenerate = DigestUtils.md5Hex(diaryUrl);
+        diary.setGeneratedUrl(idAfterGenerate);
+        diaryService.save(diary);
+        String email = shareDiaryByEmailForm.getEmail();
+
+        emailService.sendEmail(
+                email,
+                "Penzu ! Take a journals",
+                "Take a rest with this news, my friend!" +
+                        "Click here :" +
+                        "http://localhost:4200/show-diary" + "?share=" + idAfterGenerate);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 }
