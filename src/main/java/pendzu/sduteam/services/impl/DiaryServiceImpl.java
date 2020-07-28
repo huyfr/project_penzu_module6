@@ -101,4 +101,9 @@ public class DiaryServiceImpl implements IDiaryService {
     public Iterable<Diary> findDiariesByTagIdAndTitleContaining(Long tag_id, String title) {
         return repository.findDiariesByTagIdAndTitleContaining(tag_id, title);
     }
+
+    @Override
+    public Iterable<Diary> findByUrl(String url) {
+        return repository.findByGeneratedUrl(url);
+    }
 }
