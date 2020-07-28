@@ -73,6 +73,11 @@ public class DiaryServiceImpl implements IDiaryService {
     }
 
     @Override
+    public Page<Diary> findDiariesByUserIdAndStatusAfter(Pageable pageable, Long user_id, int status) {
+        return repository.findDiariesByUserIdAndStatusAfter(pageable, user_id, status);
+    }
+
+    @Override
     public Iterable<Diary> findDiariesByTagId(Long tag_id) {
         return repository.findDiariesByTagId(tag_id);
     }

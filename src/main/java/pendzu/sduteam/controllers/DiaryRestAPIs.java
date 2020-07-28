@@ -32,6 +32,9 @@ public class DiaryRestAPIs {
     @Value("${entity.exist}")
     private int activeDiaryStatus;
 
+    @Value("${entity.greater.than.zero}")
+    private int allPostAvailable;
+
     @Autowired
     private IDiaryService diaryService;
 
@@ -62,6 +65,7 @@ public class DiaryRestAPIs {
 
         LocalDateTime now = LocalDateTime.now();
         diary.setCreatedate(now);
+        diary.setUpdatedate(now);
         String tempContent = diary.getContent();
         String contentReplace = tempContent.replace("<img", "<img class=\"img-fluid\"");
         diary.setContent(contentReplace);
@@ -72,27 +76,19 @@ public class DiaryRestAPIs {
 
     @PutMapping("/diary/{id}")
     public ResponseEntity<?> updateDiary(@Valid @RequestBody Diary diary, @PathVariable Long id) {
-        Optional<Diary> diary1 = diaryService.findById(id);
+        Optional<Diary> currentDiary = diaryService.findById(id);
 
-        if (!diary1.isPresent()) {
+        if (!currentDiary.isPresent()) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        } else {
+            LocalDateTime now = LocalDateTime.now();
+            diary.setUpdatedate(now);
+            String tempContent = diary.getContent();
+            String contentReplace = tempContent.replace("<img", "<img class=\"img-fluid\"");
+            diary.setContent(contentReplace);
+            diaryService.save(diary);
+            return new ResponseEntity<>(currentDiary, HttpStatus.OK);
         }
-
-        LocalDateTime now = LocalDateTime.now();
-
-        diary1.get().setUpdatedate(now);
-        diary1.get().setTitle(diary.getTitle());
-        diary1.get().setDescription(diary.getDescription());
-        diary1.get().setContent(diary.getContent());
-        diary1.get().setTag(diary.getTag());
-        diary1.get().setUser(diary.getUser());
-        diary1.get().setAttachment(diary.getAttachment());
-        diary1.get().setStatus(diary.getStatus());
-        diary1.get().setReaction(diary.getReaction());
-
-        diaryService.save(diary1.get());
-
-        return new ResponseEntity<>(diary1, HttpStatus.OK);
     }
 
     @GetMapping(value = "/diary/user/{idUser}")
@@ -101,7 +97,7 @@ public class DiaryRestAPIs {
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "5") int size) {
         Pageable pageable = PageRequest.of(page, size);
-        Page<Diary> listByUser = diaryService.findAllByUserIdAndStatus(pageable, idUser, activeDiaryStatus);
+        Page<Diary> listByUser = diaryService.findDiariesByUserIdAndStatusAfter(pageable, idUser, allPostAvailable);
         if (listByUser.isEmpty()) {
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         }
@@ -149,15 +145,15 @@ public class DiaryRestAPIs {
     @PostMapping("/diary/searchBy-Title-And-UserId")
     public ResponseEntity<?> searchDiaryByTitleAndUserId(@RequestBody SearchDiaryByTitleAndUserId searchDiaryByTitleAndUserId) {
         List<Diary> diaries;
-        if(searchDiaryByTitleAndUserId.getTitle().equals("")) {
+        if (searchDiaryByTitleAndUserId.getTitle().equals("")) {
             diaries = (List<Diary>) diaryService.findAll();
-            if(diaries.isEmpty()) {
+            if (diaries.isEmpty()) {
                 return new ResponseEntity<>(HttpStatus.NO_CONTENT);
             }
-            return new ResponseEntity<>(diaries,HttpStatus.OK);
+            return new ResponseEntity<>(diaries, HttpStatus.OK);
         }
         diaries = (List<Diary>) diaryService.findDiariesByTitleContainingAndUserId(searchDiaryByTitleAndUserId.getTitle(), searchDiaryByTitleAndUserId.getId());
-        return new ResponseEntity<>(diaries,HttpStatus.OK);
+        return new ResponseEntity<>(diaries, HttpStatus.OK);
     }
 
     @GetMapping("/diary/searchBy-TagId/{id}")
@@ -168,26 +164,26 @@ public class DiaryRestAPIs {
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         }
 
-        return new ResponseEntity<>(diaries,HttpStatus.OK);
+        return new ResponseEntity<>(diaries, HttpStatus.OK);
     }
 
     @PostMapping("/diary/search-by-title")
     public ResponseEntity<?> searchDiaryByTitle(@RequestBody SearchDiaryByTitle titleForm) {
-        if (titleForm.getTitle().equals("") || titleForm.getTitle() == null ) {
+        if (titleForm.getTitle().equals("") || titleForm.getTitle() == null) {
             List<Diary> diaries = (List<Diary>) diaryService.findAll();
 
-            if(diaries.isEmpty()) {
+            if (diaries.isEmpty()) {
                 return new ResponseEntity<>(HttpStatus.NO_CONTENT);
             } else {
-                return new ResponseEntity<>(diaries,HttpStatus.OK);
+                return new ResponseEntity<>(diaries, HttpStatus.OK);
             }
         }
 
         List<Diary> diaries = (List<Diary>) diaryService.findDiariesByTitleContaining(titleForm.getTitle());
-        if(diaries.isEmpty()) {
+        if (diaries.isEmpty()) {
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         } else {
-            return new ResponseEntity<>(diaries,HttpStatus.OK);
+            return new ResponseEntity<>(diaries, HttpStatus.OK);
         }
     }
 
@@ -195,34 +191,34 @@ public class DiaryRestAPIs {
     public ResponseEntity<?> searchDiaryByTagAndTitle(@RequestBody SearchDiaryByTagAndTitle searchForm) {
         if (searchForm.getTitle() == null && searchForm.getTagId() == null) {
             List<Diary> diaries = (List<Diary>) diaryService.findAll();
-            if(diaries.isEmpty()) {
+            if (diaries.isEmpty()) {
                 return new ResponseEntity<>(HttpStatus.NO_CONTENT);
             }
-            return new ResponseEntity<>(diaries,HttpStatus.OK);
+            return new ResponseEntity<>(diaries, HttpStatus.OK);
         }
 
         if (searchForm.getTitle() == null && searchForm.getTagId() != null) {
             List<Diary> diaries = (List<Diary>) diaryService.findDiariesByTagId(searchForm.getTagId());
-            if(diaries.isEmpty()) {
+            if (diaries.isEmpty()) {
                 return new ResponseEntity<>(HttpStatus.NO_CONTENT);
             }
-            return new ResponseEntity<>(diaries,HttpStatus.OK);
+            return new ResponseEntity<>(diaries, HttpStatus.OK);
         }
 
         if (searchForm.getTitle() != null && searchForm.getTagId() == null) {
             List<Diary> diaries = (List<Diary>) diaryService.findDiariesByTitleContaining(searchForm.getTitle());
-            if(diaries.isEmpty()) {
+            if (diaries.isEmpty()) {
                 return new ResponseEntity<>(HttpStatus.NO_CONTENT);
             }
-            return new ResponseEntity<>(diaries,HttpStatus.OK);
+            return new ResponseEntity<>(diaries, HttpStatus.OK);
         }
 
         if (searchForm.getTagId() != null && searchForm.getTitle() != null) {
-            List<Diary> diaries = (List<Diary>) diaryService.findDiariesByTagIdAndTitleContaining(searchForm.getTagId(),searchForm.getTitle());
-            if(diaries.isEmpty()) {
+            List<Diary> diaries = (List<Diary>) diaryService.findDiariesByTagIdAndTitleContaining(searchForm.getTagId(), searchForm.getTitle());
+            if (diaries.isEmpty()) {
                 return new ResponseEntity<>(HttpStatus.NO_CONTENT);
             }
-            return new ResponseEntity<>(diaries,HttpStatus.OK);
+            return new ResponseEntity<>(diaries, HttpStatus.OK);
         } else {
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
