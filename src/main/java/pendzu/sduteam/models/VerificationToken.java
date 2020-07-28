@@ -8,7 +8,8 @@ import java.util.Date;
 import java.util.UUID;
 
 @Entity
-public class VerificationToken {private static final long serialVersionUID = 5926468583005150707L;
+public class VerificationToken {
+    private static final long serialVersionUID = 5926468583005150707L;
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
