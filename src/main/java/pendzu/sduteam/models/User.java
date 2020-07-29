@@ -1,5 +1,6 @@
 package pendzu.sduteam.models;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.hibernate.annotations.NaturalId;
 
@@ -7,6 +8,7 @@ import javax.persistence.*;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
+import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -56,6 +58,13 @@ public class User {
     @Lob
     private String blobString;
 
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
+    private LocalDateTime createDate;
+
+//    private String month = String.valueOf(this.createDate.getMonth());
+//
+//    private String date = String.valueOf(this.createDate.getDayOfMonth());
+//
     private int status = 1;
 
     public User() {
@@ -156,4 +165,28 @@ public class User {
     public void setBlobString(String blobString) {
         this.blobString = blobString;
     }
+
+    public LocalDateTime getCreateDate() {
+        return createDate;
+    }
+
+    public void setCreateDate(LocalDateTime createDate) {
+        this.createDate = createDate;
+    }
+
+//    public String getMonth() {
+//        return month;
+//    }
+//
+//    public void setMonth(String month) {
+//        this.month = month;
+//    }
+//
+//    public String getDate() {
+//        return date;
+//    }
+//
+//    public void setDate(String date) {
+//        this.date = date;
+//    }
 }
