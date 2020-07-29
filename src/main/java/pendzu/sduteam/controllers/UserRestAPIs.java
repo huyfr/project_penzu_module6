@@ -140,12 +140,6 @@ public class UserRestAPIs {
         }
     }
 
-//    @GetMapping("/user/search-by-query")
-//    public ResponseEntity<?> searchUserRegistByMonth(){
-//        List<Object[]> users = userService.findAllUserViaQuery();
-//        return new ResponseEntity<>(users, HttpStatus.OK);
-//    }
-
     @PostMapping("/user/search-by-date")
     public ResponseEntity<List<User>> searchByDate(@RequestBody AdminReport adminReport){
         List<User> userList = (List<User>) userService.findAllByCreateDateBetween(LocalDateTime.from(adminReport.getFromDate()), LocalDateTime.from(adminReport.getToDate()));

@@ -32,7 +32,7 @@ public interface IUserRepository extends PagingAndSortingRepository<User, Long> 
 
     User findByEmail(@NotBlank @Email @Size(max = 64) String email);
 
-    Iterable<User> findAllByStatusAndCreateDateBetween(int status, LocalDateTime fromDate, LocalDateTime toDate);
+    Iterable<User> findAllByCreateDateBetween(LocalDateTime fromDate, LocalDateTime toDate);
 
     Iterable<User> findAllByCreateDateBetween(LocalDateTime createDate, LocalDateTime createDate2);
 
