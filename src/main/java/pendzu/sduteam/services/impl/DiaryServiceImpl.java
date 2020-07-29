@@ -10,6 +10,7 @@ import pendzu.sduteam.models.Diary;
 import pendzu.sduteam.repositories.IDiaryRepository;
 import pendzu.sduteam.services.IDiaryService;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -111,4 +112,9 @@ public class DiaryServiceImpl implements IDiaryService {
     public Iterable<Diary> findByUrl(String url) {
         return repository.findByGeneratedUrl(url);
     }
+
+  @Override
+  public List<Diary> findAllByTitleContainingAndStatus(String title, int status) {
+    return this.repository.findAllByTitleContainingAndStatus(title, status);
+  }
 }

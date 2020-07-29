@@ -9,11 +9,14 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import pendzu.sduteam.message.request.FileForm;
+import pendzu.sduteam.message.request.MultiFileForm;
 import pendzu.sduteam.message.respone.ResponseMessage;
+import pendzu.sduteam.models.Album;
 import pendzu.sduteam.models.Diary;
 import pendzu.sduteam.models.User;
 import pendzu.sduteam.services.IDiaryService;
 import pendzu.sduteam.services.IUserService;
+import pendzu.sduteam.services.impl.AlbumFirebaseServiceExtends;
 import pendzu.sduteam.services.impl.DiaryFirebaseServiceExtends;
 import pendzu.sduteam.services.impl.UserFirebaseServiceExtends;
 
@@ -35,6 +38,9 @@ public class UploadFileRestAPIs {
 
     @Autowired
     private DiaryFirebaseServiceExtends diaryFirebaseServiceExtends;
+
+    @Autowired
+    private AlbumFirebaseServiceExtends albumFirebaseServiceExtends;
 
     @Autowired
     Environment environment;
@@ -97,4 +103,5 @@ public class UploadFileRestAPIs {
             return new ResponseEntity<>(e ,  HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
+
 }
