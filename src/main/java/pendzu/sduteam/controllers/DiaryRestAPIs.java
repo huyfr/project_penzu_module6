@@ -1,5 +1,6 @@
 package pendzu.sduteam.controllers;
 
+import org.apache.commons.codec.digest.DigestUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.PropertySource;
@@ -15,8 +16,10 @@ import pendzu.sduteam.message.request.SearchDiaryByTagAndTitle;
 import pendzu.sduteam.message.request.SearchDiaryByTitle;
 import pendzu.sduteam.message.request.SearchDiaryByTitleAndUserId;
 import pendzu.sduteam.models.Diary;
+import pendzu.sduteam.models.ShareDiaryByEmailForm;
 import pendzu.sduteam.services.IDiaryService;
 import pendzu.sduteam.services.impl.DiaryFirebaseServiceExtends;
+import pendzu.sduteam.services.impl.EmailService;
 
 import javax.validation.Valid;
 import java.time.LocalDateTime;
@@ -41,6 +44,9 @@ public class DiaryRestAPIs {
     @Autowired
     private DiaryFirebaseServiceExtends diaryFirebaseServiceExtends;
 
+    @Autowired
+    private EmailService emailService;
+
     @GetMapping("/diary")
     public ResponseEntity<?> getListDiary() {
         List<Diary> diaries = (List<Diary>) diaryService.findAll();
@@ -62,32 +68,29 @@ public class DiaryRestAPIs {
 
     @PostMapping("/diary")
     public ResponseEntity<?> createDiary(@Valid @RequestBody Diary diary) {
-
         LocalDateTime localDateTime = LocalDateTime.now();
-
         diary.setCreatedate(localDateTime);
         diary.setUpdatedate(localDateTime);
         String tempContent = diary.getContent();
-        String contentReplace = tempContent.replace("<img", "<img class=\"img-fluid\"");
-        diary.setContent(contentReplace);
+        String contentReplaceImage = tempContent.replace("<img", "<img class=\"img-fluid\"");
+        String contentReplaceFinal = contentReplaceImage.replace("<iframe", "<iframe class=\"embed-responsive embed-responsive-16by9\"");
+        diary.setContent(contentReplaceFinal);
         diaryService.save(diary);
-
         return new ResponseEntity<>(diary, HttpStatus.CREATED);
     }
 
     @PutMapping("/diary/{id}")
     public ResponseEntity<?> updateDiary(@Valid @RequestBody Diary diary, @PathVariable Long id) {
         Optional<Diary> currentDiary = diaryService.findById(id);
-
         if (!currentDiary.isPresent()) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         } else {
             LocalDateTime localDateTime = LocalDateTime.now();
-
             diary.setUpdatedate(localDateTime);
             String tempContent = diary.getContent();
-            String contentReplace = tempContent.replace("<img", "<img class=\"img-fluid\"");
-            diary.setContent(contentReplace);
+            String contentReplaceImage = tempContent.replace("<img", "<img class=\"img-fluid\"");
+            String contentReplaceFinal = contentReplaceImage.replace("<iframe", "<iframe class=\"embed-responsive embed-responsive-16by9\"");
+            diary.setContent(contentReplaceFinal);
             diaryService.save(diary);
             return new ResponseEntity<>(currentDiary, HttpStatus.OK);
         }
@@ -224,5 +227,36 @@ public class DiaryRestAPIs {
         } else {
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
+    }
+
+    @GetMapping("/diary/get-share-link/{id}")
+    ResponseEntity<?> getShareLink(@PathVariable Long id){
+        String diaryUrl = "diary/detail/"+id;
+        Diary diary = diaryService.findById(id).get();
+        String idAfterGenerate = DigestUtils.md5Hex(diaryUrl);
+        diary.setGeneratedUrl(idAfterGenerate);
+        diaryService.save(diary);
+        return new ResponseEntity<>(diary,HttpStatus.OK);
+    }
+
+    @PostMapping("/diary/share-link-via-email/{id}")
+    public ResponseEntity<?> shareLinkByEmail(
+            @RequestBody ShareDiaryByEmailForm shareDiaryByEmailForm,
+            @PathVariable Long id) {
+
+        String diaryUrl = "diary/detail/"+id;
+        Diary diary = diaryService.findById(id).get();
+        String idAfterGenerate = DigestUtils.md5Hex(diaryUrl);
+        diary.setGeneratedUrl(idAfterGenerate);
+        diaryService.save(diary);
+        String email = shareDiaryByEmailForm.getEmail();
+
+        emailService.sendEmail(
+                email,
+                "Penzu ! Take a journals",
+                "Take a rest with this news, my friend!" +
+                        "Click here :" +
+                        "http://localhost:4200/show-diary" + "?share=" + idAfterGenerate);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 }

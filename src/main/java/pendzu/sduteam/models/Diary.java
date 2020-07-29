@@ -48,13 +48,11 @@ public class Diary {
             inverseJoinColumns = @JoinColumn(name = "attachments_id"))
     private Set<Attachment> attachment = new HashSet<>();
 
-
     private int status;
 
     @ManyToOne(targetEntity = User.class)
     @JoinColumn(name = "users_id")
     private User user;
-
 
     private String blobString;
 
@@ -62,9 +60,10 @@ public class Diary {
     @JoinColumn(name = "reactions_id")
     private Reaction reaction;
 
+    private String generatedUrl;
+
     public Diary() {
     }
-
 
     public int getStatus() {
         return status;
@@ -75,7 +74,7 @@ public class Diary {
     }
 
 
-    public Diary(Long id, @NotBlank String title, @NotBlank String description, String urlFile, @NotBlank String content, Tag tag, LocalDateTime createdate, LocalDateTime updatedate, Set<Attachment> attachment, int status, User user, Reaction reaction) {
+    public Diary(Long id, @NotBlank String title, @NotBlank String description, String urlFile, @NotBlank String content, Tag tag, LocalDateTime createdate, LocalDateTime updatedate, Set<Attachment> attachment, int status, User user) {
         this.id = id;
         this.title = title;
         this.description = description;
@@ -87,17 +86,15 @@ public class Diary {
         this.attachment = attachment;
         this.status = status;
         this.user = user;
-        this.reaction = reaction;
     }
 
-    public Diary(Long id, Tag tag, User user, String blobString, Reaction reaction) {
+
+    public Diary(Long id, Tag tag, User user, String blobString) {
         this.id = id;
         this.tag = tag;
         this.user = user;
         this.blobString = blobString;
-        this.reaction = reaction;
     }
-
 
     public Long getId() {
         return id;
@@ -193,5 +190,13 @@ public class Diary {
 
     public void setReaction(Reaction reaction) {
         this.reaction = reaction;
+    }
+
+    public String getGeneratedUrl() {
+        return generatedUrl;
+    }
+
+    public void setGeneratedUrl(String generatedUrl) {
+        this.generatedUrl = generatedUrl;
     }
 }

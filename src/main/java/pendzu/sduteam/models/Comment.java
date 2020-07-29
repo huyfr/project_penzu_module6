@@ -1,13 +1,16 @@
 package pendzu.sduteam.models;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
+import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "comments")
 public class Comment {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     Long id;
 
     @NotBlank
@@ -16,15 +19,18 @@ public class Comment {
 
     private int status = 1;
 
-    @NotBlank
+//    @NotBlank
     @ManyToOne(targetEntity = User.class)
     @JoinColumn(name = "user_id")
     private User user;
 
-    @NotBlank
+//    @NotBlank
     @ManyToOne(targetEntity = Diary.class)
     @JoinColumn(name = "diary_id")
     private Diary diary;
+
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
+    LocalDateTime createdate = LocalDateTime.now();
 
     public Comment(@NotBlank String content, int status, @NotBlank User user, @NotBlank Diary diary) {
         this.content = content;
@@ -74,5 +80,13 @@ public class Comment {
 
     public void setDiary(Diary diary) {
         this.diary = diary;
+    }
+
+    public LocalDateTime getCreatedate() {
+        return createdate;
+    }
+
+    public void setCreatedate(LocalDateTime createdate) {
+        this.createdate = createdate;
     }
 }
