@@ -114,7 +114,7 @@ public class DiaryServiceImpl implements IDiaryService {
     }
 
   @Override
-  public List<Diary> findAllByTitleContainingAndStatus(String title, int status) {
-    return this.repository.findAllByTitleContainingAndStatus(title, status);
+  public List<Diary> findAllByTitleContainingAndStatusAfter(String title, int status) {
+    return this.repository.findAllByTitleContainingAndStatusAfter(title, status);
   }
 }
