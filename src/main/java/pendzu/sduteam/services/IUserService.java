@@ -31,7 +31,7 @@ public interface IUserService extends GenericService<User> {
 
     User findByEmail (String email);
 
-    Iterable<User> findAllByStatusAndCreateDateBetween(int status, LocalDateTime createDate, LocalDateTime createDate2);
+    Iterable<User> findAllByCreateDateBetween(LocalDateTime createDate, LocalDateTime createDate2);
 
 //    List<Object[]> findAllUserViaQuery();
 
