@@ -6,4 +6,6 @@ import pendzu.sduteam.models.Album;
 
 public interface IAlbumService extends GenericService<Album> {
   Page<Album> findAllByUserIdAndStatus(Pageable pageable, Long id, int status);
+
+  Iterable<Album> findAllByUserIdAndStatusAfter(Long user_id, int status);
 }

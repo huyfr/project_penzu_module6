@@ -22,6 +22,11 @@ public class AlbumServiceImpl implements IAlbumService {
   }
 
   @Override
+  public Iterable<Album> findAllByUserIdAndStatusAfter(Long user_id, int status) {
+    return this.albumRepository.findAllByUserIdAndStatusAfter(user_id,status);
+  }
+
+  @Override
   public Optional<Album> findById(Long id) {
     return Optional.empty();
   }
