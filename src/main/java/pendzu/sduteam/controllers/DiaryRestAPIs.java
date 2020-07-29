@@ -205,7 +205,7 @@ public class DiaryRestAPIs {
       }
     }
 
-    List<Diary> diaries = (List<Diary>) diaryService.findAllByTitleContainingAndStatus(title, activeDiaryStatus);
+    List<Diary> diaries = (List<Diary>) diaryService.findAllByTitleContainingAndStatusAfter(title, allPostAvailable);
     if (diaries.isEmpty()) {
       return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     } else {
