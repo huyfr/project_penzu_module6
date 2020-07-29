@@ -24,6 +24,7 @@ import pendzu.sduteam.services.IRoleService;
 import pendzu.sduteam.services.IUserService;
 
 import javax.validation.Valid;
+import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.Optional;
 import java.util.Set;
@@ -111,6 +112,7 @@ public class AuthRestAPIs {
             }
         });
         user.setRoles(roles);
+        user.setCreateDate(LocalDateTime.now());
         userService.save(user);
         return new ResponseEntity<>(new ResponseMessage("User registered successfully!"), HttpStatus.OK);
     }

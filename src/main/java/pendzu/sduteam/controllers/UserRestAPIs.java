@@ -5,18 +5,15 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import pendzu.sduteam.message.request.SearchUserByName;
-import pendzu.sduteam.models.Diary;
-import pendzu.sduteam.models.Role;
-import pendzu.sduteam.models.RoleName;
-import pendzu.sduteam.models.User;
+import pendzu.sduteam.models.*;
 import pendzu.sduteam.services.IDiaryService;
 import pendzu.sduteam.services.impl.UserServiceImpl;
 
+import java.time.LocalDateTime;
 import java.util.*;
 
 @RequestMapping("/api/sdu")
@@ -143,4 +140,15 @@ public class UserRestAPIs {
         }
     }
 
+//    @GetMapping("/user/search-by-query")
+//    public ResponseEntity<?> searchUserRegistByMonth(){
+//        List<Object[]> users = userService.findAllUserViaQuery();
+//        return new ResponseEntity<>(users, HttpStatus.OK);
+//    }
+
+    @PostMapping("/user/search-by-date")
+    public ResponseEntity<?> searchByDate(@RequestBody AdminReport adminReport){
+        List<User> userList = (List<User>) userService.findAllByStatusAndCreateDateBetween(1, LocalDateTime.from(adminReport.getFromDate()), LocalDateTime.from(adminReport.getToDate()));
+        return new ResponseEntity<>(userList, HttpStatus.OK);
+    }
 }

@@ -11,7 +11,8 @@ import pendzu.sduteam.models.User;
 import pendzu.sduteam.repositories.IUserRepository;
 import pendzu.sduteam.services.IUserService;
 
-import java.util.HashSet;
+import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
@@ -106,4 +107,19 @@ public class UserServiceImpl implements IUserService {
     public User findByEmail(String email) {
         return repository.findByEmail(email);
     }
+
+    @Override
+    public Iterable<User> findAllByStatusAndCreateDateBetween(int status, LocalDateTime fromDate, LocalDateTime toDate) {
+        return repository.findAllByStatusAndCreateDateBetween(status,fromDate,toDate);
+    }
+//
+//    @Override
+//    public List<Object[]> findAllUserViaQuery() {
+//        return repository.findAllQuery();
+//    }
+
+    //    @Override
+//    public Iterable<User> findAllByStatusAndCreateDate_MonthAndCreateDate_Date(int status, Month createDate_month, LocalDate createDate_date) {
+//        return repository.findAllByStatusAndCreateDate_MonthAndCreateDate_Date(status,createDate_month,createDate_date);
+//    }
 }
