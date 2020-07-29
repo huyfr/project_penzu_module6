@@ -1,5 +1,7 @@
 package pendzu.sduteam.models;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import java.time.LocalDateTime;
@@ -29,13 +31,15 @@ public class Diary {
     @Lob
     private String content;
 
-//    @NotBlank
+    //    @NotBlank
     @ManyToOne(targetEntity = Tag.class)
     @JoinColumn(name = "tag_id")
     private Tag tag;
 
-    private LocalDateTime createdate = LocalDateTime.now();
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
+    private LocalDateTime createdate;
 
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime updatedate;
 
     @ManyToMany(fetch = FetchType.LAZY)
@@ -44,14 +48,11 @@ public class Diary {
             inverseJoinColumns = @JoinColumn(name = "attachments_id"))
     private Set<Attachment> attachment = new HashSet<>();
 
-
-//    private int status = 1;
     private int status;
 
     @ManyToOne(targetEntity = User.class)
     @JoinColumn(name = "users_id")
     private User user;
-
 
     private String blobString;
 
@@ -64,7 +65,6 @@ public class Diary {
     public Diary() {
     }
 
-
     public int getStatus() {
         return status;
     }
@@ -73,21 +73,8 @@ public class Diary {
         this.status = status;
     }
 
-//    public Diary(@NotBlank @Size(min = 3, max = 64) String title, @NotBlank @Size(min = 3, max = 64) String description, @NotBlank String content, @NotBlank Tag tag, LocalDateTime createdate, LocalDateTime updatedate, Set<Attachment> attachment, int status, User user, String blobString, Reaction reaction) {
-//        this.title = title;
-//        this.description = description;
-//        this.content = content;
-//        this.tag = tag;
-//        this.createdate = createdate;
-//        this.updatedate = updatedate;
-//        this.attachment = attachment;
-//        this.status = status;
-//        this.user = user;
-//        this.blobString = blobString;
-//        this.reaction = reaction;
-//    }
 
-    public Diary(Long id, @NotBlank String title, @NotBlank String description, String urlFile, @NotBlank String content, Tag tag, LocalDateTime createdate, LocalDateTime updatedate, Set<Attachment> attachment, int status, User user, Reaction reaction) {
+    public Diary(Long id, @NotBlank String title, @NotBlank String description, String urlFile, @NotBlank String content, Tag tag, LocalDateTime createdate, LocalDateTime updatedate, Set<Attachment> attachment, int status, User user) {
         this.id = id;
         this.title = title;
         this.description = description;
@@ -99,28 +86,15 @@ public class Diary {
         this.attachment = attachment;
         this.status = status;
         this.user = user;
-        this.reaction = reaction;
     }
 
 
-    public Diary(Long id, Tag tag, User user, String blobString, Reaction reaction) {
+    public Diary(Long id, Tag tag, User user, String blobString) {
         this.id = id;
         this.tag = tag;
         this.user = user;
         this.blobString = blobString;
-        this.reaction = reaction;
     }
-
-    //    public Diary(String title, String description, String content,
-//                 Tag tag, Set<Attachment> attachment, User user) {
-//        this.title = title;
-//        this.description = description;
-//        this.content = content;
-//        this.tag = tag;
-//        this.attachment = attachment;
-//        this.user = user;
-//        this.blobstring = blobstring;
-//    }
 
     public Long getId() {
         return id;

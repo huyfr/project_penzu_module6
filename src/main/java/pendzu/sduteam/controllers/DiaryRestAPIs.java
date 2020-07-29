@@ -15,7 +15,8 @@ import org.springframework.web.bind.annotation.*;
 import pendzu.sduteam.message.request.SearchDiaryByTagAndTitle;
 import pendzu.sduteam.message.request.SearchDiaryByTitle;
 import pendzu.sduteam.message.request.SearchDiaryByTitleAndUserId;
-import pendzu.sduteam.models.*;
+import pendzu.sduteam.models.Diary;
+import pendzu.sduteam.models.ShareDiaryByEmailForm;
 import pendzu.sduteam.services.IDiaryService;
 import pendzu.sduteam.services.impl.DiaryFirebaseServiceExtends;
 import pendzu.sduteam.services.impl.EmailService;
@@ -67,30 +68,29 @@ public class DiaryRestAPIs {
 
     @PostMapping("/diary")
     public ResponseEntity<?> createDiary(@Valid @RequestBody Diary diary) {
-
-        LocalDateTime now = LocalDateTime.now();
-        diary.setCreatedate(now);
-        diary.setUpdatedate(now);
+        LocalDateTime localDateTime = LocalDateTime.now();
+        diary.setCreatedate(localDateTime);
+        diary.setUpdatedate(localDateTime);
         String tempContent = diary.getContent();
-        String contentReplace = tempContent.replace("<img", "<img class=\"img-fluid\"");
-        diary.setContent(contentReplace);
+        String contentReplaceImage = tempContent.replace("<img", "<img class=\"img-fluid\"");
+        String contentReplaceFinal = contentReplaceImage.replace("<iframe", "<iframe class=\"embed-responsive embed-responsive-16by9\"");
+        diary.setContent(contentReplaceFinal);
         diaryService.save(diary);
-
         return new ResponseEntity<>(diary, HttpStatus.CREATED);
     }
 
     @PutMapping("/diary/{id}")
     public ResponseEntity<?> updateDiary(@Valid @RequestBody Diary diary, @PathVariable Long id) {
         Optional<Diary> currentDiary = diaryService.findById(id);
-
         if (!currentDiary.isPresent()) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         } else {
-            LocalDateTime now = LocalDateTime.now();
-            diary.setUpdatedate(now);
+            LocalDateTime localDateTime = LocalDateTime.now();
+            diary.setUpdatedate(localDateTime);
             String tempContent = diary.getContent();
-            String contentReplace = tempContent.replace("<img", "<img class=\"img-fluid\"");
-            diary.setContent(contentReplace);
+            String contentReplaceImage = tempContent.replace("<img", "<img class=\"img-fluid\"");
+            String contentReplaceFinal = contentReplaceImage.replace("<iframe", "<iframe class=\"embed-responsive embed-responsive-16by9\"");
+            diary.setContent(contentReplaceFinal);
             diaryService.save(diary);
             return new ResponseEntity<>(currentDiary, HttpStatus.OK);
         }
