@@ -6,11 +6,11 @@ import org.springframework.format.annotation.DateTimeFormat;
 import java.time.LocalDateTime;
 
 public class AdminReport {
-    @DateTimeFormat(iso = DateTimeFormat.ISO.TIME)
-    @JsonFormat(pattern = "YYYY-MM-dd HH:mm:ss")
+//    @DateTimeFormat(iso = DateTimeFormat.ISO.TIME)
+//    @JsonFormat(pattern = "YYYY-MM-dd HH:mm:ss")
     private LocalDateTime fromDate;
-    @DateTimeFormat(iso = DateTimeFormat.ISO.TIME)
-    @JsonFormat(pattern = "YYYY-MM-dd HH:mm:ss")
+//    @DateTimeFormat(iso = DateTimeFormat.ISO.TIME)
+//    @JsonFormat(pattern = "YYYY-MM-dd HH:mm:ss")
     private LocalDateTime toDate;
 
     public AdminReport(LocalDateTime fromDate, LocalDateTime toDate) {

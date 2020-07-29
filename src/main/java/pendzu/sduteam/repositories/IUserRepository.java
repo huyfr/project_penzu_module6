@@ -34,7 +34,9 @@ public interface IUserRepository extends PagingAndSortingRepository<User, Long> 
 
     Iterable<User> findAllByStatusAndCreateDateBetween(int status, LocalDateTime fromDate, LocalDateTime toDate);
 
-//    @Query("Select user.createDate, count(user) from User user group by function('date', user.createDate)")
+    Iterable<User> findAllByCreateDateBetween(LocalDateTime createDate, LocalDateTime createDate2);
+
+    //    @Query("Select user.createDate, count(user) from User user group by function('date', user.createDate)")
 //    List<Object[]> findAllQuery();
 
 //    Iterable<User> findAllByStatusAndCreateDate_MonthAndCreateDate_Date(int status, Month createDate_month, LocalDate createDate_date);
