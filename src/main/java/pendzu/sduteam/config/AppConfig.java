@@ -37,16 +37,16 @@ public class AppConfig implements WebMvcConfigurer, ApplicationContextAware {
         registry.addFormatter(new RoleFormatter(applicationContext.getBean(RoleServiceImpl.class)));
     }
 
-    @Override
-    public void addResourceHandlers(ResourceHandlerRegistry registry) {
-        registry
-                .addResourceHandler("/assets/**")
-                .addResourceLocations("/assets/");
-
-        registry
-                .addResourceHandler("/uploads/**")
-                .addResourceLocations("file:C:/Users/Admin/Desktop/Project Sdu Team/sduteam.json");
-    }
+//    @Override
+//    public void addResourceHandlers(ResourceHandlerRegistry registry) {
+//        registry
+//                .addResourceHandler("/assets/**")
+//                .addResourceLocations("/assets/");
+//
+//        registry
+//                .addResourceHandler("/uploads/**")
+//                .addResourceLocations("file:C:/Users/Admin/Desktop/Project Sdu Team/sduteam.json");
+//    }
 
     //Config FileUpload
     @Bean(name = "multipartResolver")
