@@ -31,7 +31,7 @@ public class Album {
   private Tag tag;
 
   @JsonIgnore
-  @OneToMany(targetEntity = Image.class , mappedBy = "album" , cascade = CascadeType.ALL)
+  @OneToMany(targetEntity = Image.class, cascade = CascadeType.ALL)
   private List<Image> images;
 
   @ManyToMany(fetch = FetchType.LAZY)
