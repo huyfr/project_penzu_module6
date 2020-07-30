@@ -1,7 +1,6 @@
 package pendzu.sduteam.models;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.hibernate.annotations.NaturalId;
 
 import javax.persistence.*;
@@ -61,10 +60,6 @@ public class User {
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime createDate;
 
-//    private String month = String.valueOf(this.createDate.getMonth());
-//
-//    private String date = String.valueOf(this.createDate.getDayOfMonth());
-//
     private int status = 1;
 
     public User() {
