@@ -112,14 +112,4 @@ public class UserServiceImpl implements IUserService {
     public Iterable<User> findAllByCreateDateBetween(LocalDateTime fromDate, LocalDateTime toDate) {
         return repository.findAllByCreateDateBetween(fromDate,toDate);
     }
-//
-//    @Override
-//    public List<Object[]> findAllUserViaQuery() {
-//        return repository.findAllQuery();
-//    }
-
-    //    @Override
-//    public Iterable<User> findAllByStatusAndCreateDate_MonthAndCreateDate_Date(int status, Month createDate_month, LocalDate createDate_date) {
-//        return repository.findAllByStatusAndCreateDate_MonthAndCreateDate_Date(status,createDate_month,createDate_date);
-//    }
 }

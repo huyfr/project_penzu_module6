@@ -7,4 +7,6 @@ import pendzu.sduteam.models.Album;
 
 public interface IAlbumRepository extends PagingAndSortingRepository<Album, Long> {
   Page<Album> findAllByUserIdAndStatus(Pageable pageable,Long id,int status);
+
+  Iterable<Album> findAllByUserIdAndStatusAfter(Long user_id, int status);
 }
