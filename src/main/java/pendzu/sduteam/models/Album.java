@@ -25,7 +25,7 @@ public class Album {
   @Lob
   private String avatar;
 
-  @NotBlank
+//  @NotBlank
   @ManyToOne(targetEntity = Tag.class)
   @JoinColumn(name = "tag_id")
   private Tag tag;
@@ -44,7 +44,6 @@ public class Album {
   @JoinColumn(name = "users_id")
   private User user;
 
-
   private String blobstring;
 
   @ManyToOne(targetEntity = Reaction.class)
@@ -59,7 +58,7 @@ public class Album {
 
   private int status = 1;
 
-  public Album(@NotBlank String title, @NotBlank Tag tag, Set<Attachment> attachment, User user, String blobstring, Reaction reaction, LocalDateTime createdate, LocalDateTime updatedate, int status) {
+  public Album(@NotBlank String title, Tag tag, Set<Attachment> attachment, User user, String blobstring, Reaction reaction, LocalDateTime createdate, LocalDateTime updatedate, int status) {
     this.title = title;
     this.tag = tag;
     this.attachment = attachment;
@@ -71,7 +70,7 @@ public class Album {
     this.status = status;
   }
 
-  public Album(@NotBlank String title, String avatar, @NotBlank Tag tag, List<Image> images, Set<Attachment> attachment, User user, String blobstring, Reaction reaction, LocalDateTime createdate, LocalDateTime updatedate, int status) {
+  public Album(@NotBlank String title, String avatar,Tag tag, List<Image> images, Set<Attachment> attachment, User user, String blobstring, Reaction reaction, LocalDateTime createdate, LocalDateTime updatedate, int status) {
     this.title = title;
     this.avatar = avatar;
     this.tag = tag;
@@ -85,12 +84,14 @@ public class Album {
     this.status = status;
   }
 
-  public Album(@NotBlank String title, @NotBlank Tag tag, Set<Attachment> attachment, User user) {
+  public Album(@NotBlank String title, Tag tag, Set<Attachment> attachment, User user) {
     this.title = title;
     this.tag = tag;
     this.attachment = attachment;
     this.user = user;
   }
+
+
 
   public Album() {
   }

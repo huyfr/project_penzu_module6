@@ -12,191 +12,191 @@ import java.util.Set;
 @Table(name = "diaries")
 public class Diary {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    Long id;
+  @Id
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  Long id;
 
-    @NotBlank
-    @Lob
-    private String title;
+  @NotBlank
+  @Lob
+  private String title;
 
-    @NotBlank
-    @Lob
-    private String description;
+  @NotBlank
+  @Lob
+  private String description;
 
-    @Lob
-    private String urlFile;
+  @Lob
+  private String urlFile;
 
-    @NotBlank
-    @Lob
-    private String content;
+  @NotBlank
+  @Lob
+  private String content;
 
-    //    @NotBlank
-    @ManyToOne(targetEntity = Tag.class)
-    @JoinColumn(name = "tag_id")
-    private Tag tag;
+//  @NotBlank
+  @ManyToOne(targetEntity = Tag.class)
+  @JoinColumn(name = "tag_id")
+  private Tag tag;
 
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
-    private LocalDateTime createdate;
+  @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
+  private LocalDateTime createdate;
 
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
-    private LocalDateTime updatedate;
+  @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
+  private LocalDateTime updatedate;
 
-    @ManyToMany(fetch = FetchType.LAZY)
-    @JoinTable(name = "diaries_attachment",
-            joinColumns = @JoinColumn(name = "diaries_id"),
-            inverseJoinColumns = @JoinColumn(name = "attachments_id"))
-    private Set<Attachment> attachment = new HashSet<>();
+  @ManyToMany(fetch = FetchType.LAZY)
+  @JoinTable(name = "diaries_attachment",
+    joinColumns = @JoinColumn(name = "diaries_id"),
+    inverseJoinColumns = @JoinColumn(name = "attachments_id"))
+  private Set<Attachment> attachment = new HashSet<>();
 
-    private int status;
+  private int status;
 
-    @ManyToOne(targetEntity = User.class)
-    @JoinColumn(name = "users_id")
-    private User user;
+  @ManyToOne(targetEntity = User.class)
+  @JoinColumn(name = "users_id")
+  private User user;
 
-    private String blobString;
+  private String blobString;
 
-    @ManyToOne(targetEntity = Reaction.class)
-    @JoinColumn(name = "reactions_id")
-    private Reaction reaction;
+  @ManyToOne(targetEntity = Reaction.class)
+  @JoinColumn(name = "reactions_id")
+  private Reaction reaction;
 
-    private String generatedUrl;
+  private String generatedUrl;
 
-    public Diary() {
-    }
+  public Diary() {
+  }
 
-    public int getStatus() {
-        return status;
-    }
+  public int getStatus() {
+    return status;
+  }
 
-    public void setStatus(int status) {
-        this.status = status;
-    }
-
-
-    public Diary(Long id, @NotBlank String title, @NotBlank String description, String urlFile, @NotBlank String content, Tag tag, LocalDateTime createdate, LocalDateTime updatedate, Set<Attachment> attachment, int status, User user) {
-        this.id = id;
-        this.title = title;
-        this.description = description;
-        this.urlFile = urlFile;
-        this.content = content;
-        this.tag = tag;
-        this.createdate = createdate;
-        this.updatedate = updatedate;
-        this.attachment = attachment;
-        this.status = status;
-        this.user = user;
-    }
+  public void setStatus(int status) {
+    this.status = status;
+  }
 
 
-    public Diary(Long id, Tag tag, User user, String blobString) {
-        this.id = id;
-        this.tag = tag;
-        this.user = user;
-        this.blobString = blobString;
-    }
+  public Diary(Long id, @NotBlank String title, @NotBlank String description, String urlFile, @NotBlank String content, Tag tag, LocalDateTime createdate, LocalDateTime updatedate, Set<Attachment> attachment, int status, User user) {
+    this.id = id;
+    this.title = title;
+    this.description = description;
+    this.urlFile = urlFile;
+    this.content = content;
+    this.tag = tag;
+    this.createdate = createdate;
+    this.updatedate = updatedate;
+    this.attachment = attachment;
+    this.status = status;
+    this.user = user;
+  }
 
-    public Long getId() {
-        return id;
-    }
 
-    public void setId(Long id) {
-        this.id = id;
-    }
+  public Diary(Long id, Tag tag, User user, String blobString) {
+    this.id = id;
+    this.tag = tag;
+    this.user = user;
+    this.blobString = blobString;
+  }
 
-    public String getTitle() {
-        return title;
-    }
+  public Long getId() {
+    return id;
+  }
 
-    public void setTitle(String title) {
-        this.title = title;
-    }
+  public void setId(Long id) {
+    this.id = id;
+  }
 
-    public String getDescription() {
-        return description;
-    }
+  public String getTitle() {
+    return title;
+  }
 
-    public void setDescription(String description) {
-        this.description = description;
-    }
+  public void setTitle(String title) {
+    this.title = title;
+  }
 
-    public String getContent() {
-        return content;
-    }
+  public String getDescription() {
+    return description;
+  }
 
-    public void setContent(String content) {
-        this.content = content;
-    }
+  public void setDescription(String description) {
+    this.description = description;
+  }
 
-    public Tag getTag() {
-        return tag;
-    }
+  public String getContent() {
+    return content;
+  }
 
-    public void setTag(Tag tag) {
-        this.tag = tag;
-    }
+  public void setContent(String content) {
+    this.content = content;
+  }
 
-    public LocalDateTime getCreatedate() {
-        return createdate;
-    }
+  public Tag getTag() {
+    return tag;
+  }
 
-    public void setCreatedate(LocalDateTime createdate) {
-        this.createdate = createdate;
-    }
+  public void setTag(Tag tag) {
+    this.tag = tag;
+  }
 
-    public LocalDateTime getUpdatedate() {
-        return updatedate;
-    }
+  public LocalDateTime getCreatedate() {
+    return createdate;
+  }
 
-    public void setUpdatedate(LocalDateTime updatedate) {
-        this.updatedate = updatedate;
-    }
+  public void setCreatedate(LocalDateTime createdate) {
+    this.createdate = createdate;
+  }
 
-    public Set<Attachment> getAttachment() {
-        return attachment;
-    }
+  public LocalDateTime getUpdatedate() {
+    return updatedate;
+  }
 
-    public void setAttachment(Set<Attachment> attachment) {
-        this.attachment = attachment;
-    }
+  public void setUpdatedate(LocalDateTime updatedate) {
+    this.updatedate = updatedate;
+  }
 
-    public User getUser() {
-        return user;
-    }
+  public Set<Attachment> getAttachment() {
+    return attachment;
+  }
 
-    public void setUser(User user) {
-        this.user = user;
-    }
+  public void setAttachment(Set<Attachment> attachment) {
+    this.attachment = attachment;
+  }
 
-    public String getUrlFile() {
-        return urlFile;
-    }
+  public User getUser() {
+    return user;
+  }
 
-    public void setUrlFile(String urlFile) {
-        this.urlFile = urlFile;
-    }
+  public void setUser(User user) {
+    this.user = user;
+  }
 
-    public String getBlobString() {
-        return blobString;
-    }
+  public String getUrlFile() {
+    return urlFile;
+  }
 
-    public void setBlobString(String blobString) {
-        this.blobString = blobString;
-    }
+  public void setUrlFile(String urlFile) {
+    this.urlFile = urlFile;
+  }
 
-    public Reaction getReaction() {
-        return reaction;
-    }
+  public String getBlobString() {
+    return blobString;
+  }
 
-    public void setReaction(Reaction reaction) {
-        this.reaction = reaction;
-    }
+  public void setBlobString(String blobString) {
+    this.blobString = blobString;
+  }
 
-    public String getGeneratedUrl() {
-        return generatedUrl;
-    }
+  public Reaction getReaction() {
+    return reaction;
+  }
 
-    public void setGeneratedUrl(String generatedUrl) {
-        this.generatedUrl = generatedUrl;
-    }
+  public void setReaction(Reaction reaction) {
+    this.reaction = reaction;
+  }
+
+  public String getGeneratedUrl() {
+    return generatedUrl;
+  }
+
+  public void setGeneratedUrl(String generatedUrl) {
+    this.generatedUrl = generatedUrl;
+  }
 }

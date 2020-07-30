@@ -13,11 +13,15 @@ import pendzu.sduteam.message.request.MultiFileForm;
 import pendzu.sduteam.message.respone.ResponseMessage;
 import pendzu.sduteam.models.Album;
 import pendzu.sduteam.models.Diary;
+import pendzu.sduteam.models.Image;
 import pendzu.sduteam.models.User;
+import pendzu.sduteam.services.IAlbumService;
 import pendzu.sduteam.services.IDiaryService;
+import pendzu.sduteam.services.IImageService;
 import pendzu.sduteam.services.IUserService;
 import pendzu.sduteam.services.impl.AlbumFirebaseServiceExtends;
 import pendzu.sduteam.services.impl.DiaryFirebaseServiceExtends;
+import pendzu.sduteam.services.impl.ImageFirebaseServiceExtends;
 import pendzu.sduteam.services.impl.UserFirebaseServiceExtends;
 
 import java.io.IOException;
@@ -34,6 +38,12 @@ public class UploadFileRestAPIs {
     private IDiaryService diaryService;
 
     @Autowired
+    private IImageService imageService;
+
+    @Autowired
+    private IAlbumService albumService;
+
+    @Autowired
     private UserFirebaseServiceExtends userFirebaseServiceExtends;
 
     @Autowired
@@ -41,6 +51,9 @@ public class UploadFileRestAPIs {
 
     @Autowired
     private AlbumFirebaseServiceExtends albumFirebaseServiceExtends;
+
+    @Autowired
+    private ImageFirebaseServiceExtends imageFirebaseServiceExtends;
 
     @Autowired
     Environment environment;
@@ -103,5 +116,67 @@ public class UploadFileRestAPIs {
             return new ResponseEntity<>(e ,  HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
+
+  @PostMapping(value = "/album-avatar/{id}",consumes = MediaType.MULTIPART_FORM_DATA_VALUE )
+  public ResponseEntity<?> uploadAlbumAvatar(@ModelAttribute FileForm fileForm, BindingResult result, @PathVariable Long id) throws IOException {
+    try {
+      if (result.hasErrors()) {
+        return new ResponseEntity<>(new ResponseMessage("Upload avatar album fail"), HttpStatus.BAD_REQUEST);
+      }
+      MultipartFile multipartFile = fileForm.getFile();
+      Optional<Album> album = albumService.findById(id);
+
+      if (!album.isPresent()) {
+        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+      }
+
+      if (multipartFile != null) {
+        if(album.get().getBlobstring() == null) {
+          String urlFile = albumFirebaseServiceExtends.saveToFirebaseStorage(album.get() , multipartFile);
+          album.get().setAvatar(urlFile);
+        } else {
+          albumFirebaseServiceExtends.deleteFirebaseStorageFile(album.get());
+          String urlFile = albumFirebaseServiceExtends.saveToFirebaseStorage(album.get() , multipartFile);
+          album.get().setAvatar(urlFile);
+        }
+      }
+      albumService.save(album.get());
+      return new ResponseEntity<>(HttpStatus.OK);
+    } catch (Exception e) {
+      return new ResponseEntity<>(e, HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+  }
+
+  @PostMapping(value = "/album-add-image/{id}",consumes = MediaType.MULTIPART_FORM_DATA_VALUE )
+  public ResponseEntity<?> uploadAlbumImages(@ModelAttribute MultiFileForm multiFileForm, BindingResult result, @PathVariable Long id) throws IOException {
+    try {
+      if (result.hasErrors()) {
+        return new ResponseEntity<>(new ResponseMessage("Upload Image album fail"), HttpStatus.BAD_REQUEST);
+      }
+
+      MultipartFile[] multipartFiles = multiFileForm.getFiles();
+      Optional<Album> album = albumService.findById(id);
+
+      if (!album.isPresent()) {
+        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+      }
+
+      if (multipartFiles != null) {
+        for (int i = 0 ; i < multipartFiles.length ; i++) {
+          Image image = new Image();
+          imageService.save(image);
+          String urlFile = imageFirebaseServiceExtends.saveToFirebaseStorage(image , multipartFiles[i]);
+          image.setUrl(urlFile);
+          image.setAlbum(album.get());
+          imageService.save(image);
+        }
+      } else {
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+      }
+      return new ResponseEntity<>(HttpStatus.OK);
+    } catch (Exception e) {
+      return new ResponseEntity<>(e, HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+  }
 
 }

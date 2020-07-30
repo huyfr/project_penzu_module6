@@ -22,8 +22,8 @@ public class ImageServiceImpl implements IImageService {
   private IImageRepository imageRepository;
 
   @Override
-  public Iterable<Image> findImagesByAlbumId(Long id) {
-    return this.imageRepository.findImagesByAlbumId(id);
+  public Iterable<Image> findImagesByAlbumIdAndStatusAfter(Long id, int status) {
+    return this.imageRepository.findImagesByAlbumIdAndStatusAfter(id,status);
   }
 
   @Override
