@@ -5,5 +5,5 @@ import org.springframework.data.repository.PagingAndSortingRepository;
 import pendzu.sduteam.models.Image;
 
 public interface IImageRepository extends PagingAndSortingRepository<Image, Long> {
-  Iterable<Image> findImagesByAlbumId(Long id);
+  Iterable<Image> findImagesByAlbumIdAndStatusAfter(Long id, int status);
 }
