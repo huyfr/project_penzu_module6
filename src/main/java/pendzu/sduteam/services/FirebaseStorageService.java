@@ -83,6 +83,10 @@ public abstract class FirebaseStorageService<T> {
         blobString = "user/" + fileName;
       }
 
+      if (object instanceof Image) {
+        blobString = "image/" + fileName;
+      }
+
       Blob blob = bucket.create(blobString, testFile, Bucket.BlobWriteOption.userProject("Project-SduTeam"));
       bucket.getStorage().updateAcl(blob.getBlobId(), Acl.of(Acl.User.ofAllUsers(), Acl.Role.READER));
       String blobName = blob.getName();
@@ -95,6 +99,9 @@ public abstract class FirebaseStorageService<T> {
         ((Album) object).setBlobstring(blobName);
       }
 
+      if (object instanceof Image) {
+        ((Image) object).setBlobString(blobName);
+      }
 
       if (object instanceof Attachment) {
         ((Attachment) object).setBlobstring(blobName);
@@ -128,6 +135,10 @@ public abstract class FirebaseStorageService<T> {
       if (object instanceof User) {
         blobString = ((User) object).getBlobString();
       }
+      if (object instanceof Image) {
+        blobString = ((Image) object).getBlobString();
+      }
+
 
       BlobId blobId = BlobId.of(storageClient.bucket().getName(), blobString);
       storageClient.bucket().getStorage().delete(blobId);

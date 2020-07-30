@@ -6,14 +6,13 @@ import org.springframework.context.annotation.PropertySource;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 import pendzu.sduteam.models.Album;
 import pendzu.sduteam.services.IAlbumService;
 import pendzu.sduteam.services.impl.AlbumServiceImpl;
 
+import javax.validation.Valid;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -60,4 +59,27 @@ public class AlbumRestAPIs {
     }
     return new ResponseEntity<>(album,HttpStatus.OK);
   }
+
+  @PostMapping("/album")
+  public ResponseEntity<?> createAlbum(@Valid @RequestBody Album album) {
+    LocalDateTime localDateTime = LocalDateTime.now();
+    album.setCreatedate(localDateTime);
+    album.setUpdatedate(localDateTime);
+    albumService.save(album);
+    return new ResponseEntity<>(album, HttpStatus.CREATED);
+  }
+
+  @PutMapping("/album/{id}")
+  public ResponseEntity<?> updateAlbum(@PathVariable Long id , @RequestBody Album album) {
+    Optional<Album> album1 = albumService.findById(id);
+    if (!album1.isPresent()) {
+      return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+    }
+    album1.get().setTag(album.getTag());
+    album1.get().setTitle(album.getTitle());
+    albumService.save(album1.get());
+
+    return new ResponseEntity<>(album1 , HttpStatus.OK);
+  }
+
 }
