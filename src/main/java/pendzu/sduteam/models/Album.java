@@ -1,154 +1,194 @@
 package pendzu.sduteam.models;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 @Entity
 @Table(name = "albums")
 public class Album {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    Long id;
+  @Id
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  Long id;
 
-    @NotBlank
-    private String title;
+  @NotBlank
+  private String title;
 
-    @NotBlank
-    @ManyToOne(targetEntity = Tag.class)
-    @JoinColumn(name = "tag_id")
-    private Tag tag;
+  @Lob
+  private String avatar;
 
-    @ManyToMany(fetch = FetchType.LAZY)
-    @JoinTable(name = "albums_attachment",
-            joinColumns = @JoinColumn(name = "albums_id"),
-            inverseJoinColumns = @JoinColumn(name = "attachments_id"))
-    private Set<Attachment> attachment = new HashSet<>();
+//  @NotBlank
+  @ManyToOne(targetEntity = Tag.class)
+  @JoinColumn(name = "tag_id")
+  private Tag tag;
 
-    @ManyToOne(targetEntity = User.class)
-    @JoinColumn(name = "users_id")
-    private User user;
+  @JsonIgnore
+  @OneToMany(targetEntity = Image.class, cascade = CascadeType.ALL)
+  private List<Image> images;
+
+  @ManyToMany(fetch = FetchType.LAZY)
+  @JoinTable(name = "albums_attachment",
+    joinColumns = @JoinColumn(name = "albums_id"),
+    inverseJoinColumns = @JoinColumn(name = "attachments_id"))
+  private Set<Attachment> attachment = new HashSet<>();
+
+  @ManyToOne(targetEntity = User.class)
+  @JoinColumn(name = "users_id")
+  private User user;
+
+  private String blobstring;
+
+  @ManyToOne(targetEntity = Reaction.class)
+  @JoinColumn(name = "reactions_id")
+  private Reaction reaction;
+
+  @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
+  private LocalDateTime createdate;
+
+  @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
+  private LocalDateTime updatedate;
+
+  private int status = 1;
+
+  public Album(@NotBlank String title, Tag tag, Set<Attachment> attachment, User user, String blobstring, Reaction reaction, LocalDateTime createdate, LocalDateTime updatedate, int status) {
+    this.title = title;
+    this.tag = tag;
+    this.attachment = attachment;
+    this.user = user;
+    this.blobstring = blobstring;
+    this.reaction = reaction;
+    this.createdate = createdate;
+    this.updatedate = updatedate;
+    this.status = status;
+  }
+
+  public Album(@NotBlank String title, String avatar,Tag tag, List<Image> images, Set<Attachment> attachment, User user, String blobstring, Reaction reaction, LocalDateTime createdate, LocalDateTime updatedate, int status) {
+    this.title = title;
+    this.avatar = avatar;
+    this.tag = tag;
+    this.images = images;
+    this.attachment = attachment;
+    this.user = user;
+    this.blobstring = blobstring;
+    this.reaction = reaction;
+    this.createdate = createdate;
+    this.updatedate = updatedate;
+    this.status = status;
+  }
+
+  public Album(@NotBlank String title, Tag tag, Set<Attachment> attachment, User user) {
+    this.title = title;
+    this.tag = tag;
+    this.attachment = attachment;
+    this.user = user;
+  }
 
 
-    private String blobstring;
 
-    @ManyToOne(targetEntity = Reaction.class)
-    @JoinColumn(name = "reactions_id")
-    private Reaction reaction;
+  public Album() {
+  }
 
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
-    private LocalDateTime createdate;
+  public Long getId() {
+    return id;
+  }
 
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
-    private LocalDateTime updatedate;
+  public void setId(Long id) {
+    this.id = id;
+  }
 
-    private int status = 1;
+  public String getTitle() {
+    return title;
+  }
 
-    public Album(@NotBlank String title, @NotBlank Tag tag, Set<Attachment> attachment, User user, String blobstring, Reaction reaction, LocalDateTime createdate, LocalDateTime updatedate, int status) {
-        this.title = title;
-        this.tag = tag;
-        this.attachment = attachment;
-        this.user = user;
-        this.blobstring = blobstring;
-        this.reaction = reaction;
-        this.createdate = createdate;
-        this.updatedate = updatedate;
-        this.status = status;
-    }
+  public void setTitle(String title) {
+    this.title = title;
+  }
 
-    public Album(@NotBlank String title, @NotBlank Tag tag, Set<Attachment> attachment, User user) {
-        this.title = title;
-        this.tag = tag;
-        this.attachment = attachment;
-        this.user = user;
-    }
+  public Tag getTag() {
+    return tag;
+  }
 
-    public Album() {
-    }
+  public void setTag(Tag tag) {
+    this.tag = tag;
+  }
 
-    public Long getId() {
-        return id;
-    }
+  public Set<Attachment> getAttachment() {
+    return attachment;
+  }
 
-    public void setId(Long id) {
-        this.id = id;
-    }
+  public void setAttachment(Set<Attachment> attachment) {
+    this.attachment = attachment;
+  }
 
-    public String getTitle() {
-        return title;
-    }
+  public User getUser() {
+    return user;
+  }
 
-    public void setTitle(String title) {
-        this.title = title;
-    }
+  public void setUser(User user) {
+    this.user = user;
+  }
 
-    public Tag getTag() {
-        return tag;
-    }
+  public String getBlobstring() {
+    return blobstring;
+  }
 
-    public void setTag(Tag tag) {
-        this.tag = tag;
-    }
+  public void setBlobstring(String blobstring) {
+    this.blobstring = blobstring;
+  }
 
-    public Set<Attachment> getAttachment() {
-        return attachment;
-    }
+  public Reaction getReaction() {
+    return reaction;
+  }
 
-    public void setAttachment(Set<Attachment> attachment) {
-        this.attachment = attachment;
-    }
+  public void setReaction(Reaction reaction) {
+    this.reaction = reaction;
+  }
 
-    public User getUser() {
-        return user;
-    }
+  public LocalDateTime getCreatedate() {
+    return createdate;
+  }
 
-    public void setUser(User user) {
-        this.user = user;
-    }
+  public void setCreatedate(LocalDateTime createdate) {
+    this.createdate = createdate;
+  }
 
-    public String getBlobstring() {
-        return blobstring;
-    }
+  public LocalDateTime getUpdatedate() {
+    return updatedate;
+  }
 
-    public void setBlobstring(String blobstring) {
-        this.blobstring = blobstring;
-    }
+  public void setUpdatedate(LocalDateTime updatedate) {
+    this.updatedate = updatedate;
+  }
 
-    public Reaction getReaction() {
-        return reaction;
-    }
+  public int getStatus() {
+    return status;
+  }
 
-    public void setReaction(Reaction reaction) {
-        this.reaction = reaction;
-    }
+  public void setStatus(int status) {
+    this.status = status;
+  }
 
-    public LocalDateTime getCreatedate() {
-        return createdate;
-    }
+  public String getAvatar() {
+    return avatar;
+  }
 
-    public void setCreatedate(LocalDateTime createdate) {
-        this.createdate = createdate;
-    }
+  public void setAvatar(String avatar) {
+    this.avatar = avatar;
+  }
 
-    public LocalDateTime getUpdatedate() {
-        return updatedate;
-    }
+  public List<Image> getImages() {
+    return images;
+  }
 
-    public void setUpdatedate(LocalDateTime updatedate) {
-        this.updatedate = updatedate;
-    }
-
-    public int getStatus() {
-        return status;
-    }
-
-    public void setStatus(int status) {
-        this.status = status;
-    }
+  public void setImages(List<Image> images) {
+    this.images = images;
+  }
 }
