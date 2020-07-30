@@ -33,5 +33,5 @@ public interface IDiaryService extends GenericService<Diary> {
 
     Iterable<Diary> findByUrl(String url);
 
-  List<Diary> findAllByTitleContainingAndStatus(String title, int status);
+    List<Diary> findAllByTitleContainingAndStatusAfter(String title, int status);
 }

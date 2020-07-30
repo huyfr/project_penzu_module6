@@ -18,7 +18,7 @@ import java.util.*;
 
 @RequestMapping("/api/sdu")
 @RestController
-@CrossOrigin(origins = "*")
+@CrossOrigin("*")
 public class UserRestAPIs {
 
     @Autowired
@@ -140,15 +140,9 @@ public class UserRestAPIs {
         }
     }
 
-//    @GetMapping("/user/search-by-query")
-//    public ResponseEntity<?> searchUserRegistByMonth(){
-//        List<Object[]> users = userService.findAllUserViaQuery();
-//        return new ResponseEntity<>(users, HttpStatus.OK);
-//    }
-
     @PostMapping("/user/search-by-date")
-    public ResponseEntity<?> searchByDate(@RequestBody AdminReport adminReport){
-        List<User> userList = (List<User>) userService.findAllByStatusAndCreateDateBetween(1, LocalDateTime.from(adminReport.getFromDate()), LocalDateTime.from(adminReport.getToDate()));
+    public ResponseEntity<List<User>> searchByDate(@RequestBody AdminReport adminReport){
+        List<User> userList = (List<User>) userService.findAllByCreateDateBetween(LocalDateTime.from(adminReport.getFromDate()), LocalDateTime.from(adminReport.getToDate()));
         return new ResponseEntity<>(userList, HttpStatus.OK);
     }
 }
