@@ -141,6 +141,10 @@ public class AuthRestAPIs {
     @PutMapping("/update-password/{id}")
     public ResponseEntity<?> updatePassword(@Valid @RequestBody PasswordForm passwordForm, @PathVariable Long id) {
         Optional<User> user = userService.findById(id);
+        String currentPassword = passwordForm.getCurrentPassword();
+        if (passwordEncoder.encode(currentPassword) != user.get().getPassword()){
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
 
         if (!user.isPresent()) {
             return new ResponseEntity<>(new ResponseMessage("Not found user"), HttpStatus.NOT_FOUND);
